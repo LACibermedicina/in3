@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 232" width="520" height="464" role="img" aria-label="Logomarca IN ao cubo">
+  <defs>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7CC6B4"/><stop offset="1" stop-color="#47B29F"/></linearGradient>
+    <linearGradient id="left" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3BA794"/><stop offset="1" stop-color="#11695C"/></linearGradient>
+    <linearGradient id="right" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4CC9F0"/><stop offset="1" stop-color="#167D6E"/></linearGradient>
+  </defs>
+  <polygon points="130,6 248,72 130,138 12,72" fill="url(#top)"/>
+  <polygon points="12,72 130,138 130,226 12,160" fill="url(#left)"/>
+  <polygon points="248,72 130,138 130,226 248,160" fill="url(#right)"/>
+  <polygon points="130,68 176,94 130,120 84,94" fill="#FFD166"/>
+  <text x="130" y="102" font-family="system-ui,Segoe UI,sans-serif" font-size="32" font-weight="800" text-anchor="middle" fill="#0F5C50">³</text>
+  <text x="130" y="196" font-family="system-ui,Segoe UI,sans-serif" font-size="30" font-weight="800" text-anchor="middle" fill="#EAFBF6">IN³</text>
+</svg>
