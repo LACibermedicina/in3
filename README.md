@@ -1,161 +1,197 @@
 # 🧊 IN³ — Portfólio vivo da incubadora m3d.pro · `in.m3d.pro`
 
 > **O que entra na m3d, sai ao cubo.**
-> A IN³ é a incubadora da [m3d.pro](https://m3d.pro). Ela pega o que já existe dentro da m3d — protótipos, dados, código e pessoas — e eleva ao cubo (³): pesquisa, prototipagem rápida, validação e entrega em saúde digital.
+> A IN³ é a incubadora da [m3d.pro](https://m3d.pro): pega o que já existe dentro da m3d — protótipos,
+> dados, código e pessoas — e eleva ao cubo (³): pesquisa, prototipagem rápida, validação e entrega em
+> saúde digital.
 
-Este repositório contém o **motor** do portfólio público (`in.m3d.pro`) e o **painel administrativo apartado** que define, item por item, o que pode ser visto pelo público.
+Este repositório contém o **motor** do portfólio público (`in.m3d.pro`), o **hotsite de cada projeto**
+com liberação por camadas, o **painel administrativo em rota apartada** e a **busca com controle de
+acesso aplicado no servidor**.
+
+Stack: **PHP 8.1+ · SQLite (PDO) · FTS5 · Python (ferramentas de apoio) · Three.js** — sem
+dependências externas obrigatórias, sem CDN, sem framework.
 
 ---
 
 ## ⚡ Em 60 segundos
 
 ```bash
-npm run fetch:github     # coleta a atividade real do GitHub (server-side, com token)
-npm run build            # interpreta os projetos e monta index.html + admin.html
-npm run verify           # prova que nenhum item privado vazou
-npm run serve            # site em http://localhost:8787  · painel em /admin.html
+bash install.sh                 # confere ambiente, cria .env, banco, sincroniza e semeia
+php tools/senha.php --usuario=SEU_USUARIO --criar --papel=admin --clareza=4
+php -S localhost:8787 -t public public/index.php
+# site público  → http://localhost:8787
+# painel        → http://localhost:8787/console/entrar   (rota definida em IN3_ROTA_PAINEL)
 ```
 
-Zero dependências externas. Só Node.js ≥ 18. O site final é **um único HTML autocontido** — sem CDN, sem framework, sem chamada de rede para renderizar.
+No Windows: `install.bat` (mesma sequência).
 
 ---
 
-## 🎯 O que o sistema entrega
+## 🎯 As quatro decisões que definem o sistema
 
-| Pedido | Como foi entregue |
-|---|---|
-| Portfólio a partir de **endereços GitHub** e/ou **documentação/playbook** | `data/portfolio.source.json` associa cada item a um conjunto de repositórios (`repos`) e a um capítulo do `docs/PLAYBOOK.md` (`playbook`) |
-| **Documentação completa do projeto** como item de portfólio | este `README.md` + `docs/PLAYBOOK.md` + `docs/ARQUITETURA.md` + `docs/DEPLOY.md` |
-| Área para **engajamento e solicitação de detalhes** públicos e técnicos | seção *“Pedir detalhes”* na página pública → `POST /api/requests` → `data/requests.json`, visível no painel |
-| **Página de apresentação pública** com últimas notícias em **linguagem humana** | feed gerado de commits e marcos, cada notícia com botão **“ver técnico”** que revela o registro original |
-| **Sem expor os dados da página no GitHub** | `.gitignore` bloqueia `data/`, `portfolio.full.json`, `.env`. O repositório guarda o motor, não os dados |
-| **Ilustrações e desenho imersivo no estilo m3d.pro** | logomarca SVG do cubo ³ com os gradientes da m3d (`#7CC6B4 → #11695C`), 12 ilustrações vetoriais originais, aurora animada, cubo girando, cores claras alegres e vibrantes |
-| **Controle de acesso + página administrativa apartada** | `admin.html` (noindex) com WebCrypto SHA-256 + login de servidor com token de 60 min |
-| **Página principal = apresentação do portfólio** (`in.m3d.pro`) | `index.html` é a home; o painel fica em rota separada `/admin.html` |
-| **Logomarca INcubator (cubo³)** | cubo isométrico de 3 faces em gradientes m3d + face superior dourada marcada com `³` |
-| **Últimas atualizações vinculadas aos projetos novos** | o feed é recalculado no build a partir dos itens marcados + commits; itens novos aparecem no topo |
-| **Base no GitHub de `lacibermedicina`** | coletor lê `LACibermedicina` (27 repositórios públicos); nada é publicado sem o checkbox |
-| **Checkbox “mostrar ao público”** | 4 camadas de aplicação (curadoria → build → verify → servidor) |
-| **Mapa de interações vinculado ao calendário** | mapa de calor de 182 dias + tabela mês × projeto |
-| **Tecnologias envolvidas** | badges por projeto + nuvem global com contagem |
-| **README interpretado por IA** | camada humana + camada técnica por projeto (`tools/build.mjs`), via LLM com chave em variável de ambiente; fallback determinístico se não houver chave |
-| **Estilo imersivo, animado, com emojis e ícones** | animações CSS, contadores, revelação no scroll, filtros, modais, tooltips |
+### 1. Todo projeto nasce **não publicado**
+`mostrar_ao_publico = 0` é o padrão de fábrica. Só o que o administrador marca no painel aparece no
+site público, na API pública e no arquivo de dados. Não existe "vazamento por esquecimento".
+
+### 2. Quatro camadas de detalhamento, com teto por projeto
+
+| Camada | Nome | O que entrega |
+|---|---|---|
+| 1 | `institucional_roadmap` | Identidade, área, situação e marcos. **Sempre pública.** |
+| 2 | `institucional` | Problema, solução, público-alvo, como funciona em linguagem humana, validação. |
+| 3 | `tecnico` | Arquitetura, integrações, tecnologias e repositórios do acervo. |
+| 4 | `playbook_completo` | Ficha inteira: privacidade/LGPD, riscos, referência no playbook, notas internas (só admin). |
+
+A profundidade servida é sempre `min(nível do projeto, clareza do visitante)`:
+
+```
+profundidade = min( teto definido na curadoria , clareza de quem lê )
+```
+
+Um projeto com teto 2 **nunca** publica camada 3, mesmo para um diretor com clareza 4. O teto é do
+projeto; a clareza é do leitor; o menor valor manda.
+
+### 3. O conteúdo bloqueado **não sai do servidor**
+Não existe "esconder com CSS" nem JSON com o texto completo. As seções bloqueadas são montadas no
+servidor e simplesmente não são emitidas: a página mostra o bloco vazio com o aviso de que aquela
+camada existe e não é servida naquela profundidade.
+
+### 4. A busca filtra **dentro da SQL**
+O índice guarda o texto do projeto em **camadas cumulativas** (escopo 1, 2, 3 e 4). A consulta entra
+com `escopo <= min(clareza, teto do projeto) AND (admin OR mostrar_ao_publico = 1)`. Uma busca
+anônima não consegue alcançar texto interno porque esse texto nem participa do conjunto consultado.
+Isso vale para o site, para o painel e para a API — o mesmo caminho de código.
 
 ---
 
-## 🗂️ Estrutura
+## 🗺️ Mapa do projeto
 
 ```
 in3/
-├── index.html                  ← SITE PÚBLICO (in.m3d.pro) — autocontido, só itens públicos
-├── admin.html                  ← PAINEL ADMINISTRATIVO (rota apartada, noindex)
-├── template/
-│   ├── index.template.html     ← fonte do site público (recebe /*__DATA__*/ do build)
-│   └── admin.template.html     ← fonte do painel
+├── public/
+│   ├── index.php                front controller (site público + API + painel)
+│   └── assets/
+│       ├── css/in3.css          identidade visual (paleta oficial da marca)
+│       ├── css/painel.css       complemento do painel
+│       ├── js/voxel.js          cena voxel interativa em Three.js
+│       ├── js/site.js           filtros e enriquecimento progressivo
+│       ├── js/painel.js         ajuda de formulário do painel
+│       └── vendor/three.min.js  Three.js servido localmente (r128, MIT)
+├── src/
+│   ├── nucleo.php               bootstrap, config, CSRF, sessão, log, segurança
+│   ├── banco.php                PDO/SQLite (WAL), migrações, detecção de FTS5
+│   ├── auth.php                 usuários, papéis, clareza, tokens de acesso
+│   ├── projetos.php             curadoria, níveis, hotsite, indexação em camadas
+│   ├── busca.php                busca com filtro de escopo aplicado em SQL
+│   ├── icones.php               ícones SVG + padrões voxel determinísticos
+│   ├── render.php               layouts e componentes
+│   ├── api.php                  API JSON v1 (mesma política do HTML)
+│   └── instalador.php           instalação em 2 etapas (web) e por CLI
+├── views/                       21 views PHP (público, hotsite, painel, instalador)
 ├── data/
-│   ├── portfolio.source.json   ← CURADORIA: itens + checkbox mostrar_ao_publico  ⚠️ não versionar
-│   ├── portfolio.json          ← saída pública do build                              ⚠️ não versionar
-│   ├── portfolio.full.json     ← inclui itens privados (uso interno)                ⚠️ não versionar
-│   ├── requests.json           ← pedidos de detalhes do formulário público           ⚠️ não versionar
-│   └── github.repos.cache.json / github.readmes.cache.json / github.commits.cache.json
+│   ├── schema.sql               esquema completo comentado
+│   ├── in3.db                   banco (não versionar)
+│   └── semear/                  caches do inventário GitHub (não versionar)
 ├── tools/
-│   ├── fetch-github.mjs        ← coleta server-side (token nunca vai ao navegador)
-│   ├── build.mjs               ← interpreta (IA opcional) + filtra + injeta nos templates
-│   ├── verify.mjs              ← prova que nada privado vazou (falha com exit 1)
-│   ├── publish.mjs             ← importa a curadoria exportada pelo painel e roda build+verify
-│   └── server.mjs              ← servidor opcional (API pública filtrada + login + pedidos)
-└── docs/
-    ├── PLAYBOOK.md             ← playbook por projeto (documentação base)
-    ├── ARQUITETURA.md          ← decisões técnicas
-    └── DEPLOY.md               ← publicação em in.m3d.pro
+│   ├── instalar.php             aplica o esquema
+│   ├── sincronizar.php          coleta o inventário GitHub (token só no servidor)
+│   ├── semear.php               popula acervo a partir da curadoria + caches
+│   ├── verificar.php            prova que nada interno vazou (exit 1 se vazar)
+│   └── senha.php                cria/redefine senha pelo terminal (sem eco)
+├── docs/
+│   ├── ARQUITETURA.md           decisões técnicas e fluxo de dados
+│   ├── SEGURANCA.md             modelo de ameaças e garantias
+│   ├── DEPLOY.md                publicação em in.m3d.pro
+│   └── PLAYBOOK.md              documentação base por projeto
+├── install.sh / install.bat     autoinstaladores
+├── .env.example                 configuração (copiar para .env)
+└── legado/                      motor anterior (arquivos que você anexou), preservado
 ```
 
 ---
 
-## 🔐 Política de acesso — “mostrar ao público”
+## 🔌 API JSON (v1)
 
-Todo item nasce **oculto**. A publicação acontece em quatro camadas independentes — se uma falhar, as outras seguram:
-
-1. **Curadoria** (`data/portfolio.source.json`): `mostrar_ao_publico: true|false` e `mostrar_link_repo: true|false`.
-2. **Build** (`tools/build.mjs`): filtra antes de injetar o JSON dentro do `index.html`. Itens privados **não existem** no arquivo público.
-3. **Verificação** (`tools/verify.mjs`): lê o HTML gerado e **falha** se encontrar título privado ou URL de repositório não autorizada.
-4. **Servidor** (`tools/server.mjs`): o endpoint `/api/public/portfolio` filtra de novo em tempo de execução.
-
-> 📌 Regra prática: para publicar algo, marque o checkbox no painel → **Exportar curadoria** → `node tools/publish.mjs portfolio.full.json`. O script roda build + verify sozinho.
-
----
-
-## 🤖 Leitura interpretada por IA (duas camadas)
-
-Cada projeto recebe dois textos:
-
-- **Camada humana** — 2 a 4 frases simples, sem jargão (“consulta e acompanhamento de pacientes a distância”, “organização de documentos e impostos com leitura automática dos papéis”).
-- **Camada técnica** — repositórios, linguagens, volume versionado, nº de commits lidos, tópicos, dependências citadas no README e um convite ao pedido de detalhes.
-
-Sem chave de IA, o build usa um **interpretador determinístico** (léxico de domínios + estatísticas reais dos repositórios) — nunca inventa fatos. Com chave, um LLM reescreve as duas camadas a partir dos mesmos dados:
-
-```bash
-export OPENAI_API_KEY=sk-...            # ou outra API compatível
-export OPENAI_BASE_URL=https://api.openai.com/v1   # opcional
-export OPENAI_MODEL=gpt-4o-mini                    # opcional
-npm run build
-```
-
----
-
-## 🔑 Variáveis de ambiente
-
-| Variável | Para que serve | Obrigatória |
+| Rota | Acesso | Devolve |
 |---|---|---|
-| `GITHUB_TOKEN` | coletar repositórios/commits (inclusive privados, se autorizado) sem limite baixo de requisições | recomendada |
-| `GITHUB_USER` | conta coletada (padrão `LACibermedicina`) | não |
-| `OPENAI_API_KEY` / `OPENAI_BASE_URL` / `OPENAI_MODEL` | interpretação por IA em duas camadas | não |
-| `ADMIN_PASSWORD` | senha do painel (o servidor guarda só o hash SHA-256) | **sim, em produção** |
-| `PORT` | porta do servidor (padrão `8787`) | não |
+| `GET /api/v1/publico/portfolio` | público | Projetos liberados, já recortados na profundidade |
+| `GET /api/v1/publico/projeto/{slug}` | público | Um projeto com as camadas permitidas |
+| `GET /api/v1/publico/busca?q=` | público | Resultados filtrados por escopo |
+| `GET /api/v1/publico/tecnologias` | público | Contagem de tecnologias |
+| `GET /api/v1/publico/meta` | público | Marca, níveis, categorias, cobertura de repositórios |
+| `POST /api/v1/publico/pedidos` | público | Registra pedido de detalhamento |
+| `POST /api/v1/publico/acesso` | público | Consome um token de liberação |
+| `GET /api/v1/painel/portfolio` | autenticado | Todos os itens (respeitando a clareza) |
+| `GET /api/v1/painel/repos` | autenticado | Inventário de repositórios |
+| `POST /api/v1/painel/projeto` | admin/curador | Cria/atualiza item (exige CSRF) |
 
-Copie `.env.example` para `.env` e preencha. **O `.env` nunca é versionado e nunca é embutido no HTML** — o navegador não recebe token nenhum.
-
----
-
-## 📰 Como nascem as “últimas notícias”
-
-```
-commits reais + marcos cadastrados + status dos itens públicos
-        ↓  build.mjs
-frase humana  ←→  registro técnico (revelado sob solicitação)
-        ↓
-feed ordenado por data, filtrável por projeto
-```
-
-Exemplo de par:
-- **humano:** “Adicionado suporte a exportação de documentos — em Contos & Contas.”
-- **técnico:** `M3D-contoscontas · 4f9a1c22 · feat: add .DEC export`
+`GET /saude` devolve o estado do serviço (versão do esquema, FTS5, contagens).
 
 ---
 
-## 🚀 Publicação
+## 🎛️ Painel administrativo
 
-Resumo (detalhes em `docs/DEPLOY.md`):
+Rota apartada (`IN3_ROTA_PAINEL`, padrão `/console`), fora de qualquer link, do `robots.txt` e do
+sitemap do site público. Seções: **Visão geral · Projetos · Repositórios · Pedidos · Busca interna ·
+Usuários · Sistema**.
+
+- **Projetos** — editor completo das quatro camadas, checkboxes de publicação, vínculo com o
+  inventário de repositórios e marcos (`AAAA-MM-DD | texto`).
+- **Repositórios** — todo o acervo GitHub com visibilidade confirmada e o *passivo de curadoria*
+  (repositórios que ainda não pertencem a nenhum projeto).
+- **Pedidos** — liberar um pedido emite um link `/acesso/TOKEN` com prazo e limite de usos, que eleva
+  a clareza daquele visitante só para o projeto indicado.
+- **Usuários** — papéis (`admin`, `curador`, `leitor`) e clareza (1 a 4). Senhas nunca são exibidas.
+- **Sistema** — sincronização GitHub, reconstrução do índice, auditoria e tabelas do banco.
+
+---
+
+## 🔐 Liberação por link (`/acesso/{token}`)
+
+```
+Pedido público  →  painel: "Liberar" (camada 2, 3 ou 4 + prazo + limite de usos)
+                →  link de uso controlado, expira sozinho, auditado
+```
+
+O eleva-clareza é gravado em `acessos` com `expira_em`, `usos` e `max_usos`. O visitante recebe só o
+escopo daquele projeto — não ganha acesso ao acervo inteiro.
+
+---
+
+## 🧊 A cena voxel
+
+`public/assets/js/voxel.js` monta uma cena Three.js em que **cada projeto é uma pilha de cubos** cuja
+altura é o nível de detalhamento liberado e cuja paleta vem da categoria. É interativa, mas nunca
+essencial:
+
+- gira sozinha (pausa quando fora da tela ou com a aba oculta);
+- arraste para girar, teclado para orbitar, `Enter` para pausar o giro, clique em um cubo para ir ao
+  projeto;
+- botões **Girar · Explodir · Repor**;
+- `prefers-reduced-motion` e ausência de WebGL caem para modo estático;
+- o texto alternativo e a lista de projetos abaixo descrevem exatamente o que a cena mostra.
+
+---
+
+## 🧰 Scripts
 
 ```bash
-npm ci --omit=dev
-npm run fetch:github
-npm run build && npm run verify
-ADMIN_PASSWORD='uma-senha-forte' GITHUB_TOKEN=ghp_xxx PORT=8787 node tools/server.mjs
+php tools/instalar.php        # aplica o esquema
+php tools/sincronizar.php     # inventário GitHub (token via .env, nunca gravado)
+php tools/semear.php          # acervo: curadoria + caches → banco
+php tools/verificar.php       # PRIVACIDADE: falha (exit 1) se algo interno vazar
+php tools/senha.php --usuario=nome [--criar --papel=admin --clareza=4]
 ```
 
-Depois aponte o subdomínio `in.m3d.pro` para o servidor (A/CNAME) e termine o TLS com Nginx/Caddy.
+`tools/verificar.php` é a trava de qualidade: confere montagem de camadas para todos os projetos,
+roda buscas sensíveis (`LGPD`, `telemetria`, `arquitetura`, `riscos`, `privacidade`) simulando
+visitante anônimo, varre o código por credenciais, valida que toda senha é hash e que a rota do
+painel não aparece em arquivo público.
 
 ---
 
-## ✅ Checklist antes de cada publicação
+## 📜 Licença e uso
 
-- [ ] `npm run verify` passou (sem vazamento de item privado)
-- [ ] nenhum item com parceiro/dado sensível marcado como público
-- [ ] `ADMIN_PASSWORD` alterada do padrão
-- [ ] `.gitignore` cobrindo `data/`, `.env`, `*.full.json`
-- [ ] `admin.html` com `<meta name="robots" content="noindex,nofollow">` (já incluso)
-
-## 📜 Licença
-
-Código do motor: uso interno m3d.pro / IN³. Os dados de portfólio, textos e ilustrações pertencem à m3d.pro.
+Projeto interno da IN³ / m3d.pro. O conteúdo do portfólio é publicado sob curadoria; nenhum dado
+interno ou credencial é servido ao público.

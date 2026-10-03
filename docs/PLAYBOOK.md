@@ -1,8 +1,12 @@
 # 📖 Playbook · documentação base dos projetos da IN³
 
-Este é o documento que o portfólio consome como **documentação base**. Cada item de portfólio aponta para um capítulo daqui
-(campo `playbook` em `data/portfolio.source.json`). O README de cada repositório é interpretado pela IA e cruzado com estas fichas.
-**Preencha apenas o que é verificável.** O que estiver marcado *(pendente)* não é publicado.
+Este é o documento que o portfólio consome como **documentação base**. Cada item do acervo aponta
+para um capítulo daqui (campo *Referência no playbook*, camada 4). O README de cada repositório é
+cruzado com estas fichas.
+
+**Regra deste playbook:** preencha apenas o que é verificável. Campo marcado *(pendente)* **não é
+publicado** — o motor do portfólio (`src/projetos.php`, função `campo_publicavel`) descarta o campo
+assim que encontra a marca, e `tools/verificar.php` confirma isso a cada execução.
 
 ---
 
@@ -19,133 +23,244 @@ Este é o documento que o portfólio consome como **documentação base**. Cada 
 - **Como funciona (linguagem humana):** <sem jargão>
 - **Arquitetura (técnico):** <stack, integrações, dados>
 - **Validação:** <como sabemos que funciona>
-- **Privacidade/LGPD:** <dados tratados, base legal, retenção>
-- **Métricas observadas:** <o que medimos>
-- **Riscos:** <o que pode dar errado>
-- **Próximos passos:** <backlog curto>
-- **O que NÃO é público:** <explicitamente fora>
+- **Privacidade e LGPD:** <dados tratados, base legal, retenção>
+- **Riscos conhecidos:** <o que pode dar errado e o que já mitiga>
+- **Nível de divulgação:** 1 roadmap | 2 institucional | 3 técnico | 4 playbook
+```
+
+### Como preencher cada camada
+
+| Camada | Campos | Publicado para |
+|---|---|---|
+| 1 · Roadmap institucional | título, categoria, situação, resumo, marcos | qualquer visitante |
+| 2 · Institucional | público-alvo, problema, solução, como funciona, validação | quem pede e recebe liberação |
+| 3 · Técnico | arquitetura, integrações, tecnologias, repositórios | quem pede e recebe liberação |
+| 4 · Playbook completo | privacidade/LGPD, riscos, referência, notas internas | administração e liberação explícita |
+
+---
+
+## Onde as fichas vivem agora
+
+No motor anterior cada ficha era um bloco de Markdown neste arquivo. No motor atual elas estão no
+**banco** (`data/in3.db`, tabela `projetos`), editáveis no painel administrativo em
+*Projetos › Editar*, e o texto é reindexado em camadas a cada gravação.
+
+Vantagem prática: a mesma ficha alimenta o site público, a API, o hotsite e a busca — sem
+duplicação e sem risco de a documentação divergir do que está publicado. Este arquivo passa a ser a
+**metodologia** (como escrever a ficha), e o banco é o **conteúdo**.
+
+### Passar do texto para o banco
+
+```bash
+# depois de editar as fichas aqui, replique o que for verificável no painel:
+#   Projetos › Editar › preencher as camadas e marcar "Mostrar ao público"
+php tools/semear.php      # reaplica a curadoria de data/semear/ sobre o banco
+php tools/verificar.php   # confirma que nada interno vazou
 ```
 
 ---
 
-<a id="tele"></a>
-## 🩺 tele-m3d · Telemedicina de ponta a ponta
+## Acervo atual (confirmado na API pública do GitHub)
 
-- **Categoria:** Telemedicina & Saúde Digital · **Status:** ativo
-- **Repositórios:** `tele.M3D.pro.final`, `tele.M3D.pro`, `zipTELE`, `CypherMED-Telemed`, `saudeconectada`
-- **Problema:** atendimento clínico a distância costuma ser fragmentado — vídeo de um lado, prontuário de outro, histórico perdido.
-- **Solução:** um fluxo único de consulta remota: sala de vídeo, registro clínico, acompanhamento e continuidade do cuidado.
-- **Como funciona (linguagem humana):** o paciente entra na sala virtual, conversa com o profissional por vídeo e o que foi falado fica registrado no mesmo lugar — na próxima consulta, ninguém começa do zero.
-- **Arquitetura (técnico):** aplicação TypeScript, cliente de vídeo em tempo real, camada de prontuário, módulos de fila/atendimento. Evidência coletada: 3 repositórios da linha tele (≈ 57 MB versionados, 49 registros de trabalho lidos via API na linha `shop.m3d`/tele combinada).
-- **Validação:** *(pendente)* registrar número de sessões de teste e tempo médio de conexão.
-- **Privacidade/LGPD:** dados clínicos são sensíveis (art. 11). Áudio/vídeo só com consentimento explícito; retenção configurável; nenhum dado de paciente neste repositório.
-- **Riscos:** qualidade de rede do paciente; interoperabilidade com sistemas hospitalares legados.
-- **Próximos passos:** consolidação de `tele.M3D.pro.final` como linha oficial; trilha de auditoria de acesso.
-- **O que NÃO é público:** credenciais de salas, dados de pacientes, contratos de parceiros.
+Inventário coletado de `LACibermedicina` em 2026-10-03. Visibilidade `publico` = confirmada pela API
+pública; `pendente` = declarado na curadoria e ainda não confirmado (precisa de sincronização
+autenticada). **Nada abaixo foi inventado** — nome, linguagem, descrição e data vêm da resposta da
+API, e os caches ficam em `data/semear/github.*.cache.json`.
 
-<a id="fiscal"></a>
-## 🧾 contos-e-contas · Imposto de renda sem dor
+### Telemedicina & Saúde Digital
 
-- **Categoria:** Fiscal & Finanças · **Status:** ativo
-- **Repositórios:** `M3D-contoscontas`, `contosecontasIRF`, `Fiscal-Account`, `Contos_Contas`, `ContoContas-Fiscal`
-- **Problema:** reunir comprovantes, classificar documentos e gerar a declaração consome dias e gera erro humano.
-- **Solução:** upload de um ZIP com os documentos, leitura automática (OCR), classificação e exportação no formato oficial da Receita Federal.
-- **Como funciona (linguagem humana):** você junta os papéis em um arquivo, joga no sistema e ele lê cada documento, separa por tipo e devolve o arquivo pronto para entregar ao Leão. 🦁
-- **Arquitetura (técnico):** backend FastAPI + front React (TypeScript); OCR para extração de campos; gerador de `.DEC`/GCAP.
-- **Validação:** *(pendente)* taxa de acerto por tipo de documento.
-- **Privacidade/LGPD:** documentos fiscais são dados pessoais; processamento local/servidor dedicado; retenção mínima; exclusão sob demanda.
-- **Riscos:** variação de layout dos comprovantes; mudanças de regra da Receita.
-- **Próximos passos:** consolidar a família de protótipos (`ContoContas`, `Contos-Contas`, `contosecontasIRF`) em um único projeto canônico.
-- **O que NÃO é público:** documentos de contribuintes, chaves de API, dados bancários.
+| Repositório | Linguagem | Descrição oficial |
+|---|---|---|
+| `tele.M3D.pro.final` | TypeScript | *(sem descrição no GitHub)* |
+| `tele.M3D.pro` | TypeScript | Telemedicina |
+| `zipTELE` | Shell | backup replit telemed |
+| `CypherMED-Telemed` | TypeScript | *(sem descrição no GitHub)* |
+| `saudeconectada` | TypeScript | *(sem descrição no GitHub)* |
 
-<a id="loja"></a>
-## 🛍️ loja-catalogo · Vitrine de produtos de saúde
+### Fiscal & Finanças
 
-- **Categoria:** Comércio & Vitrine · **Status:** ativo
-- **Repositórios:** `shop.m3d`, `catalogo`, `shop`
-- **Solução:** catálogo web com listagem de produtos, categorias e carrinho.
-- **Como funciona (linguagem humana):** é a vitrine digital — mostra o que existe, organiza por categoria e permite montar o pedido.
-- **Arquitetura (técnico):** reescrita em TypeScript sobre base PHP legada (`shop`); catálogo versionado como projeto maior da linha (≈ 46 MB).
-- **Privacidade/LGPD:** só dados de pedido; nenhum dado de saúde.
-- **Próximos passos:** unificar `catalogo` e `shop.m3d`; integrar com o site institucional.
-- **O que NÃO é público:** preços de negociação e condições comerciais.
+| Repositório | Linguagem | Descrição oficial |
+|---|---|---|
+| `M3D-contoscontas` | TypeScript | App FastAPI+React para IRPF 2026. Upload ZIP, OCR inteligente, classificação docs, exportação .DEC/GCAP oficial Receita Federal |
+| `contosecontasIRF` | TypeScript | *(sem descrição no GitHub)* |
+| `Contos_Contas` | TypeScript | Repository for https://replit.com/@lucasmedicina20/Contas-Fiscais |
+| `ContoContas-Fiscal` | TypeScript | Repository for https://replit.com/@queropaz/ContoContas-Fiscal |
+| `Contos-Contas` | — | Repository for https://replit.com/@drlucasst/Contos&contas |
+| `ContoConta` | — | Repository for https://replit.com/@drlucasst/ContoConta |
+| `ContoContas` | — | *(sem descrição no GitHub)* |
+| `Fiscal-Account` | TypeScript | ContoContas |
 
-<a id="revalida"></a>
-## 🎓 revalida-m3d · Preparação para a prova de revalidação
+### Comércio & Vitrine
 
-- **Categoria:** Educação Médica · **Status:** em incubação
-- **Repositórios:** `revalida.m3d`
-- **Solução:** trilhas de estudo e banco de questões orientados à prova de revalidação médica.
-- **Como funciona (linguagem humana):** funciona como um treino guiado — o candidato responde questões e revisa os pontos fracos.
-- **Arquitetura (técnico):** aplicação TypeScript com módulo de questões e progresso.
-- **Próximos passos:** importar banco de questões; modo simulado cronometrado.
-- **O que NÃO é público:** banco de questões licenciado.
+| Repositório | Linguagem | Descrição oficial |
+|---|---|---|
+| `shop.m3d` | TypeScript | *(sem descrição no GitHub)* |
+| `catalogo` | TypeScript | *(sem descrição no GitHub)* |
+| `shop` | PHP | catalogo base web |
+| `show.m3d.pro` | Ballerina | *(sem descrição no GitHub)* |
+| `sersocial` | — | Espelho do site fornecido pelo usuário |
 
-<a id="wifi"></a>
-## 📶 wifi-space-mapper · O mapa invisível do ambiente
+### Instrumentação & Sensores
 
-- **Categoria:** Instrumentação & Sensores · **Status:** protótipo
-- **Repositórios:** `WifiSpaceMapper` (Python)
-- **Problema:** a cobertura de rede em clínicas e hospitais é crítica (telemonitoramento, prontuário em leito) e normalmente é avaliada “a olho”.
-- **Solução:** varredura contínua do sinal Wi-Fi do entorno para desenhar o mapa de cobertura do espaço.
-- **Como funciona (linguagem humana):** o programa caminha pelo ambiente medindo a força do sinal e devolve um mapa de onde a rede pega bem e onde não pega.
-- **Arquitetura (técnico):** Python, leitura de RSSI, agregação por ponto de coleta.
-- **Próximos passos:** exportar planta do mapa; integrar com `WifiSpaceMapper` → relatório de engenharia clínica.
-- **O que NÃO é público:** credenciais de rede e SSIDs de clientes.
+| Repositório | Linguagem | Descrição oficial |
+|---|---|---|
+| `WifiSpaceMapper` | Python | scan wifi surround |
+| `surgeyTube` | — | repositorio de video para cirurgia |
 
-<a id="lamd"></a>
-## 🏃 lamd · Liga Acadêmica de Medicina do Esporte
+### Educação Médica
 
-- **Categoria:** Educação Médica · **Status:** entregue
-- **Repositórios:** `LAMD`
-- **Solução:** presença digital e acervo de conteúdo da liga acadêmica.
-- **Próximos passos:** publicar cronograma de eventos.
-- **O que NÃO é público:** dados de alunos.
+| Repositório | Linguagem | Descrição oficial |
+|---|---|---|
+| `revalida.m3d` | TypeScript | *(sem descrição no GitHub)* |
+| `LAMD` | — | Liga de medicina del deporte |
+| `Emissor-de-Certificacao-de-Cursos` | — | Gerador de certificados de cursos e eventos com PHP, MySQL e Bootstrap (fork) |
 
-<a id="show"></a>
-## ✨ show-m3d-pro · A vitrine que se apresenta sozinha
+### Pesquisa & IA
 
-- **Categoria:** Comércio & Vitrine · **Status:** em incubação
-- **Repositórios:** `show.m3d.pro` (Ballerina), `sersocial`
-- **Solução:** páginas de apresentação de produto/serviço no domínio m3d.pro, com espelhamento versionado de sites fornecidos por parceiros.
-- **Próximos passos:** reaproveitar os componentes desta página pública.
+| Repositório | Linguagem | Descrição oficial |
+|---|---|---|
+| `moondream-img-` | — | tiny vision language model (fork) |
+| `janAI` | — | Jan is an open source alternative to ChatGPT that runs 100% offline on your computer (fork) |
+| `amc` | — | Adapted for healthTech usage (fork) |
 
-<a id="ia"></a>
-## 🧠 pesquisa-ia · Modelos de visão e IA local
+### Governança & Infra
 
-- **Categoria:** Pesquisa & IA · **Status:** pesquisa
-- **Repositórios:** `moondream-img-` (modelo de visão minúsculo), `janAI` (alternativa offline ao ChatGPT), `amc` (base adaptada para healthtech)
-- **Como funciona (linguagem humana):** são materiais de estudo e adaptação de modelos de IA que enxergam imagens ou rodam sem internet — base para apoio diagnóstico futuro.
-- **Arquitetura (técnico):** pesos/modelos de terceiros incorporados como base de pesquisa; adaptações próprias para contexto de saúde.
-- **Privacidade/LGPD:** IA local = dado não sai do dispositivo, o cenário preferido para dados clínicos.
-- **Riscos:** licenças de terceiros; necessidade de validação clínica antes de qualquer uso assistencial.
-- **O que NÃO é público:** nenhum dado de paciente; nenhum uso clínico declarado.
-
-<a id="cirurgia"></a>
-## 🎥 cirurgia-video · Acervo de vídeo cirúrgico *(oculto)*
-
-- **Categoria:** Instrumentação & Sensores · **Status:** backlog · **Visibilidade:** **oculto ao público**
-- **Motivo da ocultação:** vídeo cirúrgico contém imagem de paciente — só entra no site com consentimento e anonimização.
-
-<a id="certificados"></a>
-## 📜 certificados · Emissor de certificados *(oculto)*
-
-- **Categoria:** Educação Médica · **Status:** arquivado · **Visibilidade:** **oculto ao público**
-- **Solução:** gerador de certificados de cursos e eventos com PHP, MySQL e Bootstrap.
-
-<a id="governanca"></a>
-## 🏛️ perfil-organizacao · Governança & infraestrutura
-
-- **Categoria:** Governança & Infra · **Status:** infra
-- **Repositórios:** `LACibermedicina` (configuração de perfil)
-- **Papel:** padronizar identidade, licenças e visibilidade das 27 linhas de repositório da conta.
+| Repositório | Linguagem | Descrição oficial |
+|---|---|---|
+| `LACibermedicina` | — | Config files for my GitHub profile. |
+| `in3` | HTML | *(sem descrição no GitHub)* |
 
 ---
 
-## 🔁 Rotina de atualização
+## Fichas (camada 1 disponível; demais camadas sob liberação)
 
-1. `npm run fetch:github` — puxa repositórios, READMEs e últimas 100 mensagens de commit por repositório.
-2. Preencher as fichas `(pendente)` deste playbook que já tiverem evidência.
-3. `npm run build` — a IA reescreve as camadas humana e técnica a partir dos dados frescos.
-4. `npm run verify` — bloqueia se algum item oculto tentar aparecer.
-5. `node tools/publish.mjs portfolio.full.json` — quando a mudança veio do painel.
+### Projeto · Tele.M3D
+- **Categoria:** Telemedicina & Saúde Digital
+- **Status:** ativo
+- **Repositórios:** `tele.M3D.pro.final`, `tele.M3D.pro`, `zipTELE`, `CypherMED-Telemed`, `saudeconectada`
+- **Resumo:** plataforma de telemedicina de ponta a ponta, com atendimento clínico, colaboração médica
+  e gestão do cuidado digital.
+- **Marcos confirmados:** 2026-02-16 primeira versão no ar; 2026-07-13 consolidação do
+  `tele.M3D.pro.final`; 2026-08-07 último avanço registrado no repositório principal.
+- **Arquitetura (técnico):** *(liberação técnica — o README do repositório descreve a stack e os
+  perfis de uso; consultar em *Pedir detalhamento*)*
+- **Privacidade e LGPD:** *(pendente)*
+- **Nível de divulgação:** 3 (técnico) — camadas 1 e 2 publicadas, camada 3 por liberação.
+
+### Projeto · Contos & Contas
+- **Categoria:** Fiscal & Finanças
+- **Status:** ativo
+- **Repositórios:** `M3D-contoscontas`, `contosecontasIRF`, `Fiscal-Account`, `Contos_Contas`, `ContoContas-Fiscal`
+- **Resumo:** imposto de renda sem dor — upload de ZIP, OCR inteligente, classificação de documentos e
+  exportação `.DEC`/`GCAP` no formato oficial da Receita Federal.
+- **Marcos confirmados:** 2026-03-07 família Contos & Contas criada e prototipada; 2026-03-09
+  exportação `.DEC`/`GCAP` oficial integrada.
+- **Privacidade e LGPD:** *(pendente — envolve documentos fiscais pessoais; publicar somente após
+  definição da política de retenção)*
+- **Nível de divulgação:** 2 (institucional).
+
+### Projeto · Loja & Catálogo
+- **Categoria:** Comércio & Vitrine
+- **Status:** ativo
+- **Repositórios:** `shop.m3d`, `catalogo`, `shop`
+- **Resumo:** vitrine de produtos de saúde; plataforma de lojas virtuais organizada por áreas de
+  interesse e grupos de usuários. O `shop.m3d` é a versão *catálogo* do projeto.
+- **Marcos confirmados:** 2026-09-01 catálogo iniciado; 2026-09-04 `shop.m3d` reescrito em
+  TypeScript; 2026-10-02 `shop` (catálogo base web em PHP) atualizado.
+- **Nível de divulgação:** 3 (técnico).
+
+### Projeto · Revalida.M3D
+- **Categoria:** Educação Médica
+- **Status:** em incubação
+- **Repositórios:** `revalida.m3d`
+- **Resumo:** preparação para a prova de revalidação, com banco de questões e trilhas de estudo.
+- **Marcos confirmados:** 2026-09-03 commit inicial; 2026-09-04 MVP pronto (conteúdo inicial);
+  2026-09-05 atualização de conteúdo.
+- **Nível de divulgação:** 2 (institucional).
+
+### Projeto · WifiSpaceMapper
+- **Categoria:** Instrumentação & Sensores
+- **Status:** protótipo
+- **Repositórios:** `WifiSpaceMapper`
+- **Resumo:** o mapa invisível do ambiente clínico — portal web autoinstalável para mapeamento 3D de
+  ambientes por CSI Wi-Fi, com controle de usuários, uma captura por projeto, réguas dinâmicas de
+  medida, histórico de áreas mapeadas e exportação em CSV / JSON / PDF / XLSX / OBJ / PLY / STL.
+  Interface em português, inglês, espanhol e catalão.
+- **Marcos confirmados:** 2026-10-01 commit inicial (varredura de Wi-Fi no entorno); 2026-10-01
+  leitura contínua do espaço.
+- **Nível de divulgação:** 3 (técnico).
+
+### Projeto · LAMD
+- **Categoria:** Educação Médica
+- **Status:** entregue
+- **Repositórios:** `LAMD`
+- **Resumo:** Liga Acadêmica de Medicina do Esporte — site institucional e conteúdo acadêmico, com
+  projetos de extensão universitária (avaliação física e saúde na comunidade, atendimento a
+  academias, clubes e escolas).
+- **Marcos confirmados:** 2025-03-07 repositório publicado.
+- **Nível de divulgação:** 2 (institucional).
+
+### Projeto · Show.M3D.pro
+- **Categoria:** Comércio & Vitrine
+- **Status:** em incubação
+- **Repositórios:** `show.m3d.pro`
+- **Resumo:** a vitrine que se apresenta sozinha — página de apresentação em Ballerina.
+- **Marcos confirmados:** 2026-09-10 criado e publicado.
+- **Nível de divulgação:** 2 (institucional).
+
+### Projeto · SerSocial
+- **Categoria:** Comércio & Vitrine
+- **Status:** protótipo
+- **Repositórios:** `sersocial`
+- **Resumo:** presença digital espelhada — espelho do site indicado pelo usuário, mantido por fluxo
+  automático de espelhamento com suporte a Git LFS.
+- **Marcos confirmados:** 2026-09-02 site espelhado e versionado (fluxo diário via GitHub Actions).
+- **Nível de divulgação:** 2 (institucional).
+
+### Projeto · Pesquisa aberta — modelos de visão e IA local
+- **Categoria:** Pesquisa & IA
+- **Status:** pesquisa
+- **Repositórios:** `moondream-img-`, `janAI`, `amc` *(todos forks — base de estudo)*
+- **Resumo:** base de estudo sobre visão computacional e IA executada localmente:
+  `moondream-img-` (modelo de visão minúsculo), `janAI` (alternativa de código aberto ao ChatGPT,
+  100 % offline) e `amc`.
+- **Marcos confirmados:** 2025-04-12 `janAI` incorporado como base de estudo; 2026-04-20
+  `moondream-img-` incorporado.
+- **Nível de divulgação:** 2 (institucional).
+
+### Projeto · SurgeryTube
+- **Categoria:** Instrumentação & Sensores
+- **Status:** backlog
+- **Repositórios:** `surgeyTube`
+- **Resumo:** acervo de vídeo cirúrgico — repositório criado para guardar vídeos de cirurgia.
+- **Publicado:** **não** (item interno; aguarda definição de uso e consentimento de imagem)
+- **Nível de divulgação:** 1 (roadmap institucional)
+
+### Projeto · Emissor de Certificados de Cursos e Eventos
+- **Categoria:** Educação Médica
+- **Status:** arquivado
+- **Repositórios:** `Emissor-de-Certificacao-de-Cursos` *(fork)*
+- **Resumo:** gerador de certificados de cursos e eventos com PHP, MySQL e Bootstrap.
+- **Publicado:** **não** (arquivado; mantido no acervo como histórico)
+- **Nível de divulgação:** 1 (roadmap institucional)
+
+### Projeto · Perfil institucional LACibermedicina
+- **Categoria:** Governança & Infra
+- **Status:** infra
+- **Repositórios:** `LACibermedicina`
+- **Resumo:** governança e configuração de perfil da conta que hospeda o acervo (`config`,
+  `github-config`).
+- **Marcos confirmados:** 2022-10-23 conta criada; 2026-09-02 configuração de perfil atualizada.
+- **Nível de divulgação:** 1 (roadmap institucional)
+
+---
+
+## Registro de decisões de curadoria
+
+| Data | Decisão | Motivo |
+|---|---|---|
+| 2026-10-03 | Motor reescrito em PHP + SQLite, com camadas e painel em rota apartada | Portfólio precisa de busca e liberação graduada; site estático não filtra |
+| 2026-10-03 | Todo item nasce `mostrar_ao_publico = 0` | Política "só publica o que o administrador marcar" |
+| 2026-10-03 | Repositórios passam a ter visibilidade **confirmada**, nunca presumida | Não inventar dado: `pendente` até a sincronização autenticada |
+| 2026-10-03 | `SurgeryTube` e o emissor de certificados mantidos internos | Conteúdo sensível (imagem cirúrgica) e item arquivado |
+| 2026-10-03 | Todo repositório sem ficha entra automaticamente como item interno | Evitar ponto cego no passivo de curadoria |

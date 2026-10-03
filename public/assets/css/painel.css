@@ -1,0 +1,72 @@
+/* =====================================================================
+   IN³ · painel administrativo — complemento do in3.css
+   ===================================================================== */
+body.adm{background:linear-gradient(180deg,var(--papel),var(--papel-2))}
+.adm-wrap{width:min(1280px,95vw);margin:0 auto}
+.adm-topo{position:sticky;top:0;z-index:40;background:var(--teal-profundo);color:#fff;
+  box-shadow:0 6px 22px rgba(15,92,80,.3)}
+.adm-topo a,.adm-topo .selo-clareza{color:#fff}
+.adm-topo-linha{display:flex;align-items:center;gap:1rem;padding:.55rem 0}
+.adm-topo-dir{margin-left:auto;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.adm-topo .selo-clareza{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4)}
+.adm-topo .botao{border-color:rgba(255,255,255,.45);color:#fff;background:rgba(255,255,255,.1)}
+.adm-topo .botao:hover{background:rgba(255,255,255,.24);color:#fff}
+.adm-corpo{display:grid;grid-template-columns:238px 1fr;gap:1.4rem;padding:1.4rem 0 3rem;align-items:start}
+.painel-nav{display:grid;gap:.25rem;position:sticky;top:74px}
+.painel-nav-a{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;border-radius:var(--raio-sm);
+  text-decoration:none;color:inherit;font-weight:600;font-size:.94rem;border:1px solid transparent}
+.painel-nav-a:hover{background:rgba(71,178,159,.16)}
+.painel-nav-a.on{background:var(--teal-profundo);color:#fff}
+.painel-conteudo{min-width:0}
+@media (max-width:900px){
+  .adm-corpo{grid-template-columns:1fr}
+  .painel-nav{position:static;grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;padding-bottom:.4rem}
+}
+
+/* KPIs */
+.kpis{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin:0 0 1.2rem}
+.kpi{padding:.85rem 1rem;border-radius:var(--raio-sm);background:color-mix(in srgb,var(--papel) 92%,#fff);
+  border:1px solid rgba(15,92,80,.15);box-shadow:var(--sombra-2);display:grid;gap:.1rem}
+.kpi-n{font-size:1.7rem;font-weight:800;line-height:1;color:var(--teal-profundo)}
+.kpi-r{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;opacity:.8;font-weight:700}
+.kpi-alerta .kpi-n{color:var(--rosa)}
+.duas-colunas{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.kpis-mini .kpi-n{font-size:1.3rem}
+
+/* tabelas */
+.tabela{width:100%;border-collapse:collapse;font-size:.9rem;background:color-mix(in srgb,var(--papel) 94%,#fff);
+  border-radius:var(--raio-sm);overflow:hidden;box-shadow:var(--sombra-2);margin:.6rem 0 0}
+.tabela th,.tabela td{padding:.6rem .7rem;text-align:left;border-bottom:1px solid rgba(15,92,80,.12);vertical-align:top}
+.tabela th{background:rgba(71,178,159,.16);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.tabela tr:last-child td{border-bottom:0}
+.tabela-proj td{font-size:.88rem}
+.in-num{width:72px;padding:.3rem .4rem}
+.in-senha{width:150px;padding:.3rem .4rem}
+
+/* barras */
+.barras{list-style:none;padding:0;display:grid;gap:.45rem}
+.barras li{display:grid;grid-template-columns:190px 1fr 42px;gap:.55rem;align-items:center;font-size:.88rem}
+.barra-rot{font-weight:600}
+.barra-trilha{height:12px;border-radius:999px;background:rgba(18,42,46,.14);overflow:hidden}
+.barra-preenche{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--teal),var(--verde-vivo));transition:width .6s var(--anim)}
+.barra-n{text-align:right;font-weight:700}
+
+/* formulário de projeto */
+.grade-repos{display:grid;gap:.35rem;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  max-height:340px;overflow:auto;padding:.6rem;border-radius:var(--raio-sm);background:rgba(71,178,159,.07)}
+.repo-op{display:flex;align-items:center;gap:.4rem;font-size:.86rem}
+.previa-ico{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(140deg,var(--teal),var(--teal-profundo));color:#fff;margin-top:.3rem}
+details summary{cursor:pointer;font-weight:700;padding:.35rem 0}
+.passos{list-style:none;display:flex;gap:1rem;padding:0;flex-wrap:wrap;margin:0 0 1.2rem}
+.passos li{font-weight:700;font-size:.9rem;opacity:.55;padding-left:1.4rem;position:relative}
+.passos li::before{content:"○";position:absolute;left:0}
+.passos li.on{opacity:1;color:var(--teal-profundo)}
+.passos li.on::before{content:"◉"}
+.passos li.feito::before{content:"●";color:var(--verde-vivo)}
+
+/* entrada */
+.entrar{display:grid;place-items:center;min-height:64vh}
+.entrar-caixa{width:min(430px,92vw);padding:1.6rem;border-radius:var(--raio);
+  background:color-mix(in srgb,var(--papel) 94%,#fff);box-shadow:var(--sombra);border:1px solid rgba(15,92,80,.16)}
