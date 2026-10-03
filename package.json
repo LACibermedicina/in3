@@ -1,0 +1,20 @@
+{
+  "name": "in3-incubator",
+  "version": "3.0.0",
+  "private": true,
+  "description": "IN³ · INcubator — portfólio vivo da incubadora m3d.pro com controle de acesso por camadas (PHP 8 + SQLite + JS vanilla).",
+  "license": "UNLICENSED",
+  "engines": {
+    "php": ">=8.0"
+  },
+  "scripts": {
+    "instalar": "php tools/instalar.php",
+    "semear": "php tools/semear.php",
+    "sincronizar": "php tools/sincronizar.php --conta=LACibermedicina",
+    "verificar": "php tools/verificar.php",
+    "exportar": "php tools/exportar.php",
+    "servir": "php -S 127.0.0.1:8787 -t public public/index.php",
+    "auditar": "python3 tools/auxiliar.py --auditar",
+    "icones": "python3 tools/auxiliar.py --icones in3-icones.png"
+  }
+}

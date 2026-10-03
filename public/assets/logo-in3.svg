@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="240" height="260" role="img" aria-label="IN³ · INcubator — m3d.pro">
+  <defs>
+    <linearGradient id="halo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE9A8" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#FFC961" stop-opacity=".25"/>
+    </linearGradient>
+    <linearGradient id="topo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A9E8D1"/><stop offset="1" stop-color="#74CDB0"/>
+    </linearGradient>
+  </defs>
+  <!-- soquete hexagonal de microchip (núcleo luminoso) -->
+  <polygon points="120,14 208,63 208,161 120,210 32,161 32,63" fill="none" stroke="#74CDB0" stroke-width="7" opacity=".55"/>
+  <polygon points="120,30 194,72 194,152 120,194 46,152 46,72" fill="url(#halo)"/>
+  <!-- cubo isométrico: núcleo -->
+  <polygon points="120,62 178,96 120,130 62,96" fill="url(#topo)"/>
+  <polygon points="62,96 120,130 120,196 62,162" fill="#2D9F7E"/>
+  <polygon points="178,96 120,130 120,196 178,162" fill="#43A1B7"/>
+  <!-- losango dourado com o numeral -->
+  <polygon points="120,76 146,92 120,108 94,92" fill="#FCD05F"/>
+  <text x="120" y="99" text-anchor="middle" font-family="Verdana,DejaVu Sans,sans-serif" font-size="19" font-weight="700" fill="#0E2124">3</text>
+  <!-- wordmark -->
+  <text x="120" y="228" text-anchor="middle" font-family="Verdana,DejaVu Sans,sans-serif" font-size="34" font-weight="700" fill="#0B2026">IN&#179;</text>
+  <text x="120" y="250" text-anchor="middle" font-family="Verdana,DejaVu Sans,sans-serif" font-size="12" letter-spacing="2" fill="#3E6B63">M3D.PRO · INCUBADORA</text>
+</svg>
