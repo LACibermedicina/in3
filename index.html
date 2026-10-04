@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>IN³ · portfólio vivo da incubadora m3d.pro</title>
+<meta name="description" content="IN³ — incubadora da m3d.pro. Cuber três camadas: roadmap institucional, tecnologia e playbook de cada projeto incubado." />
+<style>
+  :root{
+    --bg:#FAFCFA; --paper:#FFFFFF;
+    --ink:#102A2A; --teal:#0F5C50; --mint:#59C1A5; --gold:#FED166;
+    --line:#DDEAE6; --soft:#EAFBF6;
+    --r:14px; --shadow:0 18px 40px -20px rgba(20,80,70,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font:16px/1.55 "Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:saturate(160%) blur(8px);
+    border-bottom:1px solid var(--line);z-index:20;}
+  .head-row{display:flex;align-items:center;gap:14px;max-width:1180px;margin:0 auto;padding:14px 18px;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--teal);text-decoration:none}
+  .logo svg{width:38px;height:38px}
+  .logo .t{font-size:18px;letter-spacing:.4px}
+  .logo .t small{display:block;font-weight:600;color:#3BA794;font-size:11px;letter-spacing:.6px}
+  nav.top{flex:1;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  nav.top a{padding:6px 10px;border-radius:999px;text-decoration:none;color:#235;font-weight:600;font-size:14px}
+  nav.top a:hover{background:var(--soft)}
+  .band{display:flex;gap:4px}
+  .band button{padding:6px 9px;border-radius:999px;border:1px solid var(--line);background:#fff;
+    font-size:12px;cursor:pointer}
+  .band button[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+  .btnlogin{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;
+    background:var(--teal);color:#fff;border:none;cursor:pointer;font-weight:700;font-size:14px;text-decoration:none}
+  .btnlogin:hover{filter:brightness(1.05)}
+  main{max-width:1180px;margin:0 auto;padding:24px 18px 80px}
+  .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;margin:6px 0 32px}
+  .hero h1{font-size:44px;line-height:1.05;margin:0 0 12px;color:var(--ink)}
+  .hero h1 b{color:var(--teal)}
+  .hero p{font-size:17px;margin:0 0 18px;color:#2a4949}
+  .pix{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+  .pix span{padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--teal);font-size:12px;font-weight:700}
+  .cube{aspect-ratio:1;background:radial-gradient(120% 120% at 0% 0%,#fff 0,#E6F7F2 60%,#C7EBE2 100%);
+    border-radius:24px;position:relative;box-shadow:var(--shadow);overflow:hidden}
+  .cube svg{position:absolute;inset:0;width:100%;height:100%}
+  h2{font-size:26px;margin:34px 0 6px}
+  h2 small{color:#5a7a78;font-weight:500;font-size:14px;display:block;margin-top:4px}
+  .feed{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    box-shadow:var(--shadow);transition:transform .25s ease, box-shadow .25s ease;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-3px);box-shadow:0 18px 60px -22px rgba(15,92,80,.30)}
+  .card .thumb{aspect-ratio:16/10;background:#EAFBF6;position:relative;overflow:hidden}
+  .card .thumb svg{position:absolute;inset:0;width:100%;height:100%}
+  .card .badge{position:absolute;left:10px;top:10px;background:rgba(255,255,255,.95);padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800;color:var(--teal);border:1px solid var(--line)}
+  .card .body{padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:8px}
+  .card time{font-size:12px;color:#678}
+  .card h3{margin:0;font-size:17px;color:var(--ink)}
+  .card p{margin:0;font-size:14px;color:#345050}
+  .card .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:10px}
+  .chips i{padding:3px 7px;border-radius:6px;background:var(--soft);color:var(--teal);font-style:normal;font-size:11px;font-weight:700}
+
+  /* timeline */
+  .timeline{position:relative;margin:18px 0 6px;padding-left:24px;border-left:3px dotted var(--mint)}
+  .timeline .step{position:relative;margin:14px 0;background:#fff;border:1px solid var(--line);
+    padding:12px 14px;border-radius:12px}
+  .timeline .step::before{content:"";position:absolute;left:-30px;top:18px;width:14px;height:14px;border-radius:50%;
+    background:var(--gold);border:3px solid var(--mint)}
+  .timeline .step b{color:var(--teal)}
+  .timeline .step small{display:block;color:#678;font-size:12px;margin-top:2px}
+  .timeline .step .lvl{display:inline-block;margin-top:6px;padding:2px 8px;font-size:11px;border-radius:999px;background:#fff;border:1px solid var(--line);color:#345}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(15,42,42,.45);display:none;align-items:center;justify-content:center;z-index:40;padding:18px}
+  .modal.open{display:flex}
+  .modal .box{background:#fff;max-width:420px;width:100%;border-radius:18px;box-shadow:var(--shadow);padding:20px;border:1px solid var(--line);position:relative}
+  .modal h3{margin:0 0 8px}
+  .modal p{font-size:13px;color:#456;margin:0 0 14px}
+  .modal label{display:block;font-size:12px;font-weight:700;margin:10px 0 4px;color:#345}
+  .modal input[type=text],.modal input[type=email],.modal input[type=password]{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fafdfc}
+  .modal .row{display:flex;gap:8px}
+  .modal button{padding:10px 14px;border-radius:10px;border:1px solid var(--teal);background:var(--teal);color:#fff;font-weight:700;cursor:pointer}
+  .modal button.ghost{background:#fff;color:var(--teal)}
+  .modal .close{position:absolute;top:10px;right:12px;border:none;background:transparent;font-size:22px;cursor:pointer;color:#678;line-height:1}
+  .warn{background:#fff8e1;border:1px solid #f2de94;color:#7a5b00;padding:10px 12px;border-radius:10px;font-size:12px;margin-top:10px}
+  .ok{background:#EAFBF6;border:1px solid #b5e6d6;color:#0F5C50;padding:10px 12px;border-radius:10px;font-size:13px;margin-top:10px}
+  .err{background:#fdecec;border:1px solid #f3b9b9;color:#7a1b1b;padding:10px 12px;border-radius:10px;font-size:13px;margin-top:10px}
+
+  footer{max-width:1180px;margin:0 auto;padding:24px 18px 40px;color:#678;font-size:13px;border-top:1px solid var(--line)}
+
+  @media (max-width:780px){
+    .hero{grid-template-columns:1fr}
+    .hero h1{font-size:34px}
+    nav.top{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .card,.cube{transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-row">
+    <a class="logo" href="#">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#74CDB0"/><stop offset="1" stop-color="#2D9F7E"/></linearGradient>
+        </defs>
+        <polygon points="32,6 58,20 58,46 32,60 6,46 6,20" fill="url(#g1)"/>
+        <polygon points="32,6 58,20 32,34" fill="#74CDB0"/>
+        <polygon points="32,6 6,20 32,34" fill="#2D9F7E"/>
+        <polygon points="32,34 58,20 58,46 32,60" fill="#43A1B7"/>
+        <text x="32" y="44" text-anchor="middle" font-family="Inter,Segoe UI" font-size="14" font-weight="800" fill="#FFFFFF">IN³</text>
+      </svg>
+      <span class="t">IN³<small data-i18n="brand.sub">M3D.PRO · INCUBADORA</small></span>
+    </a>
+    <nav class="top" aria-label="Navegação principal">
+      <a href="#vitrine" data-i18n="nav.news">Notícias</a>
+      <a href="#roadmap-m3d" data-i18n="nav.roadmap">Roadmap</a>
+      <a href="#linhas-projeto" data-i18n="nav.timeline">Linha do tempo</a>
+      <a href="#sobre" data-i18n="nav.about">Sobre</a>
+    </nav>
+    <div class="band" role="group" aria-label="Idioma">
+      <button data-lang="pt-BR" aria-pressed="true" title="Português">🇧🇷</button>
+      <button data-lang="en"    aria-pressed="false" title="English">🇺🇸</button>
+      <button data-lang="es"    aria-pressed="false" title="Español">🇪🇸</button>
+      <button data-lang="gn"    aria-pressed="false" title="Avañe'ẽ">🇵🇾</button>
+      <button data-lang="zh"    aria-pressed="false" title="中文">🇨🇳</button>
+    </div>
+    <button id="abrir-login" class="btnlogin" aria-haspopup="dialog" data-abrir-login>🔐 <span data-i18n="login.btn">Entrar</span></button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <h1 data-i18n="hero.t">O que entra na <b>m3d</b>,<br/> sai ao cubo: <b>IN³</b>.</h1>
+      <p data-i18n="hero.p">A incubadora pública da m3d.pro. Cada projeto tem um hotsite com quatro camadas de detalhe — do roadmap institucional ao playbook completo.</p>
+      <div class="pix">
+        <span data-i18n="hero.pix1">10 projetos publicados</span>
+        <span data-i18n="hero.pix2">28 repositórios mapeados</span>
+        <span data-i18n="hero.pix3">5 idiomas</span>
+      </div>
+    </div>
+    <div class="cube" aria-hidden="true">
+      <svg viewBox="0 0 320 320">
+        <defs>
+          <linearGradient id="aur" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#74CDB0"/><stop offset="1" stop-color="#3AA3BA"/>
+          </linearGradient>
+        </defs>
+        <g transform="translate(160 165)">
+          <polygon points="0,-100 86,-50 86,50 0,100 -86,50 -86,-50" fill="url(#aur)" opacity=".92"/>
+          <polygon points="0,-100 86,-50 0,0 -86,-50" fill="#A6E1CB"/>
+          <polygon points="0,-100 -86,-50 0,0" fill="#74CDB0"/>
+          <polygon points="0,0 86,-50 86,50 0,100 -86,50 -86,-50" fill="#2D9F7E" opacity=".55"/>
+          <polygon points="0,-22 28,-39 28,5 0,22 -28,5 -28,-39" fill="#FED166"/>
+          <text x="0" y="3" text-anchor="middle" font-size="22" font-weight="800" fill="#102A2A">3</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <h2 id="vitrine" data-i18n="feed.t">Últimas notícias dos projetos incubados
+    <small data-i18n="feed.s">Atualizado em tempo real a partir dos repositórios da incubadora</small></h2>
+
+  <section class="feed" id="grid-noticias" aria-label="Feed de notícias dos projetos"></section>
+
+  <h2 id="roadmap-m3d" data-i18n="rm.t">Roadmap da m3d.pro e da incubadora
+    <small data-i18n="rm.s">Fases da plataforma — do núcleo m3d.pro ao portfólio público IN³.</small></h2>
+
+  <div class="timeline" id="linha-m3d">
+    <div class="step"><b data-i18n="rm.1.t">Núcleo m3d.pro</b>
+      <small data-i18n="rm.1.d">2024 → 2025 · plataforma base, identidade, incubadora interna.</small>
+      <span class="lvl" data-i18n="rm.lvl.done">entregue</span></div>
+    <div class="step"><b data-i18n="rm.2.t">Catálogo & Telemedicina</b>
+      <small data-i18n="rm.2.d">2025 → 2026 · Tele.M3D, Loja & Catálogo, Contos & Contas.</small>
+      <span class="lvl" data-i18n="rm.lvl.live">em produção</span></div>
+    <div class="step"><b data-i18n="rm.3.t">Pesquisa & Sensores</b>
+      <small data-i18n="rm.3.d">2026 · Pesquisa aberta, WifiSpaceMapper, LAMD.</small>
+      <span class="lvl" data-i18n="rm.lvl.dev">em desenvolvimento</span></div>
+    <div class="step"><b data-i18n="rm.4.t">Portfólio público IN³</b>
+      <small data-i18n="rm.4.d">2026 · in.m3d.pro, multilíngue, com hotsites por projeto.</small>
+      <span class="lvl" data-i18n="rm.lvl.now">agora</span></div>
+  </div>
+
+  <h2 id="linhas-projeto" data-i18n="lp.t">Linha do tempo por projeto
+    <small data-i18n="lp.s">Marcos reais, sem invenção — o que não consta entra como “pendente de curadoria”.</small></h2>
+  <div class="timeline" id="linhas-projeto"></div>
+
+  <h2 id="sobre" data-i18n="about.t">Sobre a IN³
+    <small data-i18n="about.s">Política: nada nasce público. Cada camada precisa de liberação.</small></h2>
+  <p data-i18n="about.p">A IN³ (INcubator³) é a vitrine oficial da m3d.pro. Mostra apenas o que o administrador da curadoria liberar; todo o resto permanece interno e pode ser solicitado via formulário — em seguida chega por e-mail um link temporário, válido por 60 minutos, com a camada técnica liberada.</p>
+</main>
+
+<footer>
+  <span data-i18n="foot.copy">Feito com 🧊 pela equipe da m3d.pro. Código aberto, dados do GitHub real da conta LACibermedicina.</span>
+</footer>
+
+<!-- ====== MODAL DE LOGIN ====== -->
+<div class="modal" id="modal-login" role="dialog" aria-modal="true" aria-labelledby="tt-login">
+  <div class="box" role="document">
+    <button class="close" data-fechar-modal aria-label="Fechar">×</button>
+    <h3 id="tt-login">🔐 <span data-i18n="login.t">Acesso ao painel administrativo</span></h3>
+    <p data-i18n="login.p">Você pode entrar com um token enviado por e-mail (caminho dinâmico) ou com o token universal <code>arcano</code> — esse caminho só é aceito pelo servidor quando o administrador ativa a opção <em>permitir token universal</em>.</p>
+
+    <label for="email" data-i18n="login.email">E-mail para receber o token</label>
+    <div class="row">
+      <input id="email" type="email" placeholder="voce@exemplo.com" autocomplete="email"/>
+      <button id="pedir-token" class="ghost" data-i18n="login.send">Enviar token</button>
+    </div>
+
+    <label for="token" data-i18n="login.token" style="margin-top:14px">Token recebido (ou <code>arcano</code>)</label>
+    <input id="token" type="password" placeholder="Cole aqui o token" autocomplete="one-time-code"/>
+    <div class="row" style="margin-top:12px">
+      <button id="validar-token" data-i18n="login.go">Entrar no painel</button>
+    </div>
+
+    <div class="warn" data-i18n="login.warn">⚠️ Token universal <code>arcano</code> é um atalho administrativo. Para um site público em produção, desative-o no painel e use somente o envio dinâmico por e-mail (SMTP / Resend / Nodemailer).</div>
+
+    <div id="login-status"></div>
+  </div>
+</div>
+
+<script>
+// =================================================================
+//  I18N — dicionário pt-BR / en / es / gn (Avañe'ẽ) / zh (中文)
+// =================================================================
+const I18N = {
+  'pt-BR':{
+    'brand.sub':'M3D.PRO · INCUBADORA',
+    'nav.news':'Notícias','nav.roadmap':'Roadmap','nav.timeline':'Linha do tempo','nav.about':'Sobre',
+    'foot.copy':'Feito com 🧊 pela equipe da m3d.pro. Código aberto, dados do GitHub real da conta LACibermedicina.',
+    'login.btn':'Entrar','login.t':'Acesso ao painel administrativo','login.p':'Você pode entrar com um token enviado por e-mail (caminho dinâmico) ou com o token universal <code>arcano</code> — esse caminho só é aceito pelo servidor quando o administrador ativa a opção <em>permitir token universal</em>.',
+    'login.email':'E-mail para receber o token','login.send':'Enviar token','login.token':'Token recebido (ou <code>arcano</code>)','login.go':'Entrar no painel',
+    'login.warn':'⚠️ Token universal <code>arcano</code> é um atalho administrativo. Para um site público em produção, desative-o no painel e use somente o envio dinâmico por e-mail (SMTP / Resend / Nodemailer).',
+    'hero.t':'O que entra na <b>m3d</b>,<br/> sai ao cubo: <b>IN³</b>.',
+    'hero.p':'A incubadora pública da m3d.pro. Cada projeto tem um hotsite com quatro camadas de detalhe — do roadmap institucional ao playbook completo.',
+    'hero.pix1':'10 projetos publicados','hero.pix2':'28 repositórios mapeados','hero.pix3':'5 idiomas',
+    'feed.t':'Últimas notícias dos projetos incubados','feed.s':'Atualizado em tempo real a partir dos repositórios da incubadora',
+    'rm.t':'Roadmap da m3d.pro e da incubadora','rm.s':'Fases da plataforma — do núcleo m3d.pro ao portfólio público IN³.',
+    'rm.1.t':'Núcleo m3d.pro','rm.1.d':'2024 → 2025 · plataforma base, identidade, incubadora interna.','rm.lvl.done':'entregue',
+    'rm.2.t':'Catálogo & Telemedicina','rm.2.d':'2025 → 2026 · Tele.M3D, Loja & Catálogo, Contos & Contas.','rm.lvl.live':'em produção',
+    'rm.3.t':'Pesquisa & Sensores','rm.3.d':'2026 · Pesquisa aberta, WifiSpaceMapper, LAMD.','rm.lvl.dev':'em desenvolvimento',
+    'rm.4.t':'Portfólio público IN³','rm.4.d':'2026 · in.m3d.pro, multilíngue, com hotsites por projeto.','rm.lvl.now':'agora',
+    'lp.t':'Linha do tempo por projeto','lp.s':'Marcos reais, sem invenção — o que não consta entra como “pendente de curadoria”.',
+    'about.t':'Sobre a IN³','about.s':'Política: nada nasce público. Cada camada precisa de liberação.',
+    'about.p':'A IN³ (INcubator³) é a vitrine oficial da m3d.pro. Mostra apenas o que o administrador da curadoria liberar; todo o resto permanece interno e pode ser solicitado via formulário — em seguida chega por e-mail um link temporário, válido por 60 minutos, com a camada técnica liberada.',
+    'card.tele.t':'Tele.M3D em produção com 5 repositórios','card.tele.s':'Telemedicina, prontuário e agenda em um único fluxo web.',
+    'card.contos.t':'Contos & Contas integra mais 3 repos','card.contos.s':'IRPF, fiscal e contábil: a triade está coberta.',
+    'card.loja.t':'Loja & Catálogo entra em vitrine','card.loja.s':'Catálogo público com 3 vitrines sincronizadas.',
+    'card.revalida.t':'Revalida.M3D em incubação','card.revalida.s':'Trilha de estudo adaptativa para o Revalida.',
+    'card.wifi.t':'WifiSpaceMapper protótipo piloto','card.wifi.s':'Mapeamento de cobertura Wi-Fi com sensor espacial.',
+    'card.lamd.t':'LAMD entregue para turma-piloto','card.lamd.s':'Aplicativo de Educação Médica para provas práticas.',
+    'card.show.t':'Show.M3D.pro chega à incubadora','card.show.s':'Vitrine imersiva do ecossistema m3d.pro.',
+    'card.sersocial.t':'SerSocial em prototipagem','card.sersocial.s':'Comunicação escrita escalável para redes sociais.',
+    'card.pesq.t':'Pesquisa aberta: novos modelos','card.pesq.s':'moondream, janAI e AMC em experimentação aberta.',
+    'card.perfil.t':'Perfil institucional publicado','card.perfil.s':'Página de apresentação da LACibermedicina.',
+    'tag.telemed':'Telemedicina','tag.fiscal':'Fiscal','tag.vitrine':'Vitrine','tag.edu':'Educação','tag.sensor':'Sensor','tag.ia':'IA','tag.gov':'Governança',
+    'lp.tele.1':'Repositórios integrados à curadoria',
+    'lp.tele.2':'Hotsite público com 4 camadas',
+    'lp.tele.3':'Solicitação técnica liberada por token',
+    'lp.contos.1':'Migração ContosContas → contoscontasIRF',
+    'lp.contos.2':'Integração Fiscal-Account',
+    'lp.contos.3':'Roadmap institucional publicado',
+    'lp.wifi.1':'Hardware de mapeamento conectado',
+    'lp.wifi.2':'Primeira varredura pública',
+    'lp.wifi.3':'API documentada',
+  },
+  'en':{
+    'brand.sub':'M3D.PRO · INCUBATOR',
+    'nav.news':'News','nav.roadmap':'Roadmap','nav.timeline':'Timeline','nav.about':'About',
+    'foot.copy':'Made with 🧊 by the m3d.pro team. Open source, fed by the real GitHub of LACibermedicina.',
+    'login.btn':'Sign in','login.t':'Administrative panel access','login.p':'You can sign in with a token emailed to you (dynamic flow) or with the universal token <code>arcano</code> — the latter is only accepted by the server when the administrator enables <em>allow universal token</em>.',
+    'login.email':'Email to receive the token','login.send':'Send token','login.token':'Token you received (or <code>arcano</code>)','login.go':'Open panel',
+    'login.warn':'⚠️ The universal token <code>arcano</code> is an admin shortcut. For a public site in production, disable it and rely on dynamic email delivery (SMTP / Resend / Nodemailer).',
+    'hero.t':'What enters <b>m3d</b>,<br/> comes out as a cube: <b>IN³</b>.',
+    'hero.p':'The public incubator of m3d.pro. Each project has a microsite with four layers of detail — from the institutional roadmap to the complete playbook.',
+    'hero.pix1':'10 published projects','hero.pix2':'28 mapped repositories','hero.pix3':'5 languages',
+    'feed.t':'Latest news from incubated projects','feed.s':'Updated in real time from the incubator repositories',
+    'rm.t':'m3d.pro and incubator roadmap','rm.s':'Platform phases — from the m3d.pro core to the public IN³ portfolio.',
+    'rm.1.t':'m3d.pro core','rm.1.d':'2024 → 2025 · base platform, identity, in-house incubator.','rm.lvl.done':'delivered',
+    'rm.2.t':'Catalog & Telemedicine','rm.2.d':'2025 → 2026 · Tele.M3D, Shop & Catalog, Tales & Books.','rm.lvl.live':'in production',
+    'rm.3.t':'Research & Sensors','rm.3.d':'2026 · Open Research, WifiSpaceMapper, LAMD.','rm.lvl.dev':'in development',
+    'rm.4.t':'Public IN³ portfolio','rm.4.d':'2026 · in.m3d.pro, multilingual, project microsites.','rm.lvl.now':'now',
+    'lp.t':'Timeline per project','lp.s':'Real milestones, never invented — anything missing shows as “pending curation”.',
+    'about.t':'About IN³','about.s':'Policy: nothing is born public. Each layer needs curation.',
+    'about.p':'IN³ (INcubator³) is the official showcase of m3d.pro. It only shows what the curator releases; everything else stays private and can be requested via the form — a one-hour link granting the technical layer arrives by email.',
+    'card.tele.t':'Tele.M3D in production with 5 repos','card.tele.s':'Telemedicine, records and scheduling in one web flow.',
+    'card.contos.t':'Tales & Books integrates 3 more repos','card.contos.s':'Tax filing, fiscal and accounting — the triad is covered.',
+    'card.loja.t':'Shop & Catalog goes live','card.loja.s':'Public catalog with 3 synchronized storefronts.',
+    'card.revalida.t':'Revalida.M3D in incubation','card.revalida.s':'Adaptive study path for the Revalida exam.',
+    'card.wifi.t':'WifiSpaceMapper pilot prototype','card.wifi.s':'Wi-Fi coverage mapping with a spatial sensor.',
+    'card.lamd.t':'LAMD delivered to pilot class','card.lamd.s':'Medical-Education app for hands-on exams.',
+    'card.show.t':'Show.M3D.pro joins the incubator','card.show.s':'Immersive showcase for the m3d.pro ecosystem.',
+    'card.sersocial.t':'SerSocial in prototyping','card.sersocial.s':'Scalable written content for social networks.',
+    'card.pesq.t':'Open Research: new models','card.pesq.s':'moondream, janAI and AMC in open experimentation.',
+    'card.perfil.t':'Institutional profile published','card.perfil.s':'Presentation page for LACibermedicina.',
+    'tag.telemed':'Telemedicine','tag.fiscal':'Fiscal','tag.vitrine':'Showcase','tag.edu':'Education','tag.sensor':'Sensor','tag.ia':'AI','tag.gov':'Governance',
+    'lp.tele.1':'Repositories merged into curation',
+    'lp.tele.2':'Public microsite with 4 layers',
+    'lp.tele.3':'Technical detail unlocked by token',
+    'lp.contos.1':'ContosContas → contoscontasIRF migration',
+    'lp.contos.2':'Fiscal-Account integration',
+    'lp.contos.3':'Institutional roadmap published',
+    'lp.wifi.1':'Mapping hardware connected',
+    'lp.wifi.2':'First public sweep',
+    'lp.wifi.3':'Documented API',
+  },
+  'es':{
+    'brand.sub':'M3D.PRO · INCUBADORA',
+    'nav.news':'Noticias','nav.roadmap':'Hoja de ruta','nav.timeline':'Cronología','nav.about':'Acerca',
+    'foot.copy':'Hecho con 🧊 por el equipo de m3d.pro. Código abierto, datos del GitHub real de LACibermedicina.',
+    'login.btn':'Entrar','login.t':'Acceso al panel administrativo','login.p':'Puedes entrar con un token enviado por correo (flujo dinámico) o con el token universal <code>arcano</code> — este último solo lo acepta el servidor cuando el administrador activa <em>permitir token universal</em>.',
+    'login.email':'Correo para recibir el token','login.send':'Enviar token','login.token':'Token recibido (o <code>arcano</code>)','login.go':'Entrar al panel',
+    'login.warn':'⚠️ El token universal <code>arcano</code> es un atajo administrativo. Para un sitio público en producción, desactívalo y usa envío dinámico por correo (SMTP / Resend / Nodemailer).',
+    'hero.t':'Lo que entra en <b>m3d</b>,<br/> sale al cubo: <b>IN³</b>.',
+    'hero.p':'La incubadora pública de m3d.pro. Cada proyecto tiene un micrositio con cuatro capas de detalle — desde la hoja de ruta institucional hasta el playbook completo.',
+    'hero.pix1':'10 proyectos publicados','hero.pix2':'28 repositorios mapeados','hero.pix3':'5 idiomas',
+    'feed.t':'Últimas noticias de los proyectos incubados','feed.s':'Actualizado en tiempo real desde los repositorios de la incubadora',
+    'rm.t':'Hoja de ruta de m3d.pro e incubadora','rm.s':'Fases de la plataforma — del núcleo m3d.pro al portfolio público IN³.',
+    'rm.1.t':'Núcleo m3d.pro','rm.1.d':'2024 → 2025 · plataforma base, identidad, incubadora interna.','rm.lvl.done':'entregado',
+    'rm.2.t':'Catálogo y Telemedicina','rm.2.d':'2025 → 2026 · Tele.M3D, Tienda y Catálogo, Cuentos y Cuentas.','rm.lvl.live':'en producción',
+    'rm.3.t':'Investigación y Sensores','rm.3.d':'2026 · Investigación abierta, WifiSpaceMapper, LAMD.','rm.lvl.dev':'en desarrollo',
+    'rm.4.t':'Portfolio público IN³','rm.4.d':'2026 · in.m3d.pro, multilingüe, micrositios por proyecto.','rm.lvl.now':'ahora',
+    'lp.t':'Cronología por proyecto','lp.s':'Hitos reales, nunca inventados — lo que falta queda como “pendiente de curación”.',
+    'about.t':'Sobre IN³','about.s':'Política: nada nace público. Cada capa necesita curación.',
+    'about.p':'IN³ (INcubator³) es la vitrina oficial de m3d.pro. Solo muestra lo que el curador libera; el resto permanece privado y puede solicitarse — llega por correo un enlace temporal de 60 minutos con la capa técnica.',
+    'card.tele.t':'Tele.M3D en producción con 5 repos','card.tele.s':'Telemedicina, historia clínica y agenda en un solo flujo web.',
+    'card.contos.t':'Cuentos & Cuentas integra 3 repos más','card.contos.s':'IRPF, fiscal y contable: la tríada está cubierta.',
+    'card.loja.t':'Tienda & Catálogo entra en vitrina','card.loja.s':'Catálogo público con 3 escaparates sincronizados.',
+    'card.revalida.t':'Revalida.M3D en incubación','card.revalida.s':'Itinerario de estudio adaptativo para el Revalida.',
+    'card.wifi.t':'WifiSpaceMapper prototipo piloto','card.wifi.s':'Mapeo de cobertura Wi-Fi con sensor espacial.',
+    'card.lamd.t':'LAMD entregado a la turma piloto','card.lamd.s':'App de Educación Médica para exámenes prácticos.',
+    'card.show.t':'Show.M3D.pro llega a la incubadora','card.show.s':'Vitrina inmersiva del ecosistema m3d.pro.',
+    'card.sersocial.t':'SerSocial en prototipado','card.sersocial.s':'Contenido escrito escalable para redes sociales.',
+    'card.pesq.t':'Investigación abierta: nuevos modelos','card.pesq.s':'moondream, janAI y AMC en experimentación abierta.',
+    'card.perfil.t':'Perfil institucional publicado','card.perfil.s':'Página de presentación de LACibermedicina.',
+    'tag.telemed':'Telemedicina','tag.fiscal':'Fiscal','tag.vitrine':'Escaparate','tag.edu':'Educación','tag.sensor':'Sensor','tag.ia':'IA','tag.gov':'Gobernanza',
+    'lp.tele.1':'Repositorios integrados a la curación',
+    'lp.tele.2':'Micrositio público con 4 capas',
+    'lp.tele.3':'Detalle técnico desbloqueado por token',
+    'lp.contos.1':'Migración ContosContas → contoscontasIRF',
+    'lp.contos.2':'Integración Fiscal-Account',
+    'lp.contos.3':'Hoja de ruta institucional publicada',
+    'lp.wifi.1':'Hardware de mapeo conectado',
+    'lp.wifi.2':'Primer barrido público',
+    'lp.wifi.3':'API documentada',
+  },
+  'gn':{
+    'brand.sub':'M3D.PRO · INKUBADÓRA',
+    'nav.news':'Maranduki','nav.roadmap':'Rupáa jepi','nav.timeline':'Ára oñemobyta','nav.about':'Oreko',
+    'foot.copy':'Hecha 🧊 m3d.pro aty rupive. Código ijehegua, LACibermedicina-rupi GitHub tee guive.',
+    'login.btn':'Eike','login.t':'Oñemboguáta painel rehegua','login.p':'Eike token ñanduti veve rupive (oñemobyta jepi) térã token universal <code>arcano</code> ndive — ko’ãva ohupyty servidor ko’ág̃a admin ombohape <em>token universal oñemoneĩ</em>.',
+    'login.email':'Ñanduti veve token og̃uahẽ hag̃ua','login.send':'Embohasa token','login.token':'Token oujykyre (térã <code>arcano</code>)','login.go':'Eike painel-pe',
+    'login.warn':'⚠️ Token universal <code>arcano</code> ha’e pya’eha administrativo. Sitio publiko producción-pe, embogue ha eipuru ñanduti veve oñemobyta (SMTP / Resend / Nodemailer).',
+    'hero.t':'<b>m3d</b>-pe oinheráva,<br/> kubope oñesẽ: <b>IN³</b>.',
+    'hero.p':'m3d.pro-rupi incubadora pública. Peteĩteĩ proyecto oguereko hotsite peteĩ kuatia 4 capas — road instituciópa guive playbook-completo peve.',
+    'hero.pix1':'10 proyecto opúblico','hero.pix2':'28 repositorio oñemapea','hero.pix3':'5 ñe’ẽ',
+    'feed.t':'Maranduki pyahu proyecto incubado-gua','feed.s':'Repositorio incubadora-gua oñemoañete reko',
+    'rm.t':'m3d.pro ha incubadora rupáa','rm.s':'Plataforma fase — m3d.pro ñeñói guive IN³ público peve.',
+    'rm.1.t':'m3d.pro ñeñói','rm.1.d':'2024 → 2025 · plataforma ñepyrũ, identidad, incubadora-pegua.','rm.lvl.done':'opútava',
+    'rm.2.t':'Catálogo ha Telemedicina','rm.2.d':'2025 → 2026 · Tele.M3D, Loja ha Catálogo, Contos ha Contas.','rm.lvl.live':'produción-kuáva',
+    'rm.3.t':'Investigación ha Sensore','rm.3.d':'2026 · Investigación ijehegua, WifiSpaceMapper, LAMD.','rm.lvl.dev':'oñemboapykuaáva',
+    'rm.4.t':'IN³ portfolio público','rm.4.d':'2026 · in.m3d.pro, oñe’ẽpapapy, proyecto hotsite.','rm.lvl.now':'ko’ág̃a',
+    'lp.t':'Ára oñemobyta proyecto pegua','lp.s':'Hito teete, ndahi’árima ojapo — ojejapo’ỹva oñeñongatu “curación pendiente”.',
+    'about.t':'IN³ rehegua','about.s':'Ñemomba’e: ndahi’ári opúblico iñepyrũ. Peteĩteĩ capa oikotevẽ curación.',
+    'about.p':'IN³ (INcubator³) ha’e m3d.pro-rupi vitrina oficial. Ohechauka ohape’ỹva curador; oikotevẽ jepi kuatia — oñemobyta korreope pya’eha 60 min tekno capa-pe.',
+    'card.tele.t':'Tele.M3D producción-pe 5 repos ndive','card.tele.s':'Telemedicina, história clínica ha agenda peteĩ flujo web-pe.',
+    'card.contos.t':'Contos ha Contas oñembojoaju 3 repope','card.contos.s':'IRPF, fiscal ha contábil: tríada oĩ.',
+    'card.loja.t':'Loja ha Catálogo opúblico','card.loja.s':'Catálogo público 3 vitrina ndive.',
+    'card.revalida.t':'Revalida.M3D incubación-pe','card.revalida.s':'Ñepyrũrã adaptativo Revalida-pe.',
+    'card.wifi.t':'WifiSpaceMapper prototipo piloto','card.wifi.s':'Cobertura Wi-Fi oje mape sensor espacial ndive.',
+    'card.lamd.t':'LAMD turma piloto-pe','card.lamd.s':'Educación Médica app examen práctico-pe.',
+    'card.show.t':'Show.M3D.pro oike incubadorape','card.show.s':'Vitrina m3d.pro ecosistema rehegua.',
+    'card.sersocial.t':'SerSocial prototipo-pe','card.sersocial.s':'Maranduki escrito red social-pe.',
+    'card.pesq.t':'Investigación abierta: modelo pyahu','card.pesq.s':'moondream, janAI ha AMC experimentación abierta-pe.',
+    'card.perfil.t':'Perfil institucional opúblico','card.perfil.s':'LACibermedicina ñeñói kuatia.',
+    'tag.telemed':'Telemedicina','tag.fiscal':'Fiscal','tag.vitrine':'Vitrina','tag.edu':'Mbo’esyry','tag.sensor':'Sensor','tag.ia':'IA','tag.gov':'Gobierno',
+    'lp.tele.1':'Repositorio curación-pe oñembojoaju',
+    'lp.tele.2':'Hotsite público 4 capas',
+    'lp.tele.3':'Detalle técnico token rupive ojeipe’a',
+    'lp.contos.1':'ContosContas → contoscontasIRF ñemongu’e',
+    'lp.contos.2':'Fiscal-Account ñembojoaju',
+    'lp.contos.3':'Roadmap institucional opúblico',
+    'lp.wifi.1':'Mapeo hardware oñembojoaju',
+    'lp.wifi.2':'Ñepyrũ jepyré’e público',
+    'lp.wifi.3':'API oñeñeñói',
+  },
+  'zh':{
+    'brand.sub':'M3D.PRO · 孵化器',
+    'nav.news':'新闻','nav.roadmap':'路线图','nav.timeline':'时间线','nav.about':'关于',
+    'foot.copy':'由 m3d.pro 团队用 🧊 制作。开源,由 LACibermedicina 的真实 GitHub 提供数据。',
+    'login.btn':'登录','login.t':'管理面板入口','login.p':'可以使用邮件发送的令牌登录(动态流程),或使用通用令牌 <code>arcano</code> — 后者仅在管理员启用<em>允许通用令牌</em>时被服务器接受。',
+    'login.email':'用于接收令牌的邮箱','login.send':'发送令牌','login.token':'收到的令牌(或 <code>arcano</code>)','login.go':'进入面板',
+    'login.warn':'⚠️ 通用令牌 <code>arcano</code> 是管理员快捷方式。生产环境的公开站点请关闭它,改用邮件动态发送(SMTP / Resend / Nodemailer)。',
+    'hero.t':'进入 <b>m3d</b>,<br/>以立方呈现:<b>IN³</b>。',
+    'hero.p':'m3d.pro 的公开孵化器。每个项目都有一个包含四层细节的微站 — 从机构路线图到完整 playbook。',
+    'hero.pix1':'10 个已发布项目','hero.pix2':'28 个已映射仓库','hero.pix3':'5 种语言',
+    'feed.t':'孵化项目的最新动态','feed.s':'根据孵化器仓库实时更新',
+    'rm.t':'m3d.pro 与孵化器路线图','rm.s':'平台阶段 — 从 m3d.pro 内核到 IN³ 公开作品集。',
+    'rm.1.t':'m3d.pro 内核','rm.1.d':'2024 → 2025 · 基础平台、身份、内部孵化器。','rm.lvl.done':'已交付',
+    'rm.2.t':'目录与远程医疗','rm.2.d':'2025 → 2026 · Tele.M3D、商店与目录、账目与故事。','rm.lvl.live':'上线中',
+    'rm.3.t':'研究与传感器','rm.3.d':'2026 · 开放研究、WifiSpaceMapper、LAMD。','rm.lvl.dev':'开发中',
+    'rm.4.t':'公开 IN³ 作品集','rm.4.d':'2026 · in.m3d.pro,多语言,项目微站。','rm.lvl.now':'当前',
+    'lp.t':'各项目时间线','lp.s':'真实里程碑,绝不编造 — 缺项标为 “待策展”。',
+    'about.t':'关于 IN³','about.s':'原则:不自动公开,每层都需要策展。',
+    'about.p':'IN³ (INcubator³) 是 m3d.pro 的官方展示页。仅展示策展者放行的内容;其余保持内部,可通过表单申请 — 邮件会发送一个 60 分钟有效的技术层临时链接。',
+    'card.tele.t':'Tele.M3D 已上线 5 个仓库','card.tele.s':'远程医疗、病历与排期,统一 Web 流程。',
+    'card.contos.t':'账目与故事再接入 3 个仓库','card.contos.s':'IRPF、税务与会计的三件套已齐备。',
+    'card.loja.t':'商店与目录正式上线','card.loja.s':'3 个同步橱窗的公开目录。',
+    'card.revalida.t':'Revalida.M3D 孵化中','card.revalida.s':'Revalida 考试的自适应学习路径。',
+    'card.wifi.t':'WifiSpaceMapper 试点原型','card.wifi.s':'使用空间传感器映射 Wi-Fi 覆盖。',
+    'card.lamd.t':'LAMD 已交付试点班级','card.lamd.s':'用于实操考试的医学教育 App。',
+    'card.show.t':'Show.M3D.pro 加入孵化器','card.show.s':'m3d.pro 生态的沉浸式展示。',
+    'card.sersocial.t':'SerSocial 原型中','card.sersocial.s':'面向社交平台的可扩展文本内容。',
+    'card.pesq.t':'开放研究:新模型','card.pesq.s':'moondream、janAI 与 AMC 的开放实验。',
+    'card.perfil.t':'机构介绍页发布','card.perfil.s':'LACibermedicina 的官方介绍页。',
+    'tag.telemed':'远程医疗','tag.fiscal':'税务','tag.vitrine':'展示','tag.edu':'教育','tag.sensor':'传感器','tag.ia':'AI','tag.gov':'治理',
+    'lp.tele.1':'仓库并入策展',
+    'lp.tele.2':'公开微站 4 层',
+    'lp.tele.3':'令牌解锁技术细节',
+    'lp.contos.1':'迁移 ContosContas → contoscontasIRF',
+    'lp.contos.2':'Fiscal-Account 集成',
+    'lp.contos.3':'机构路线图公开',
+    'lp.wifi.1':'映射硬件接入',
+    'lp.wifi.2':'首次公开扫描',
+    'lp.wifi.3':'API 已文档化',
+  }
+};
+
+// =================================================================
+//  ESTADO GLOBAL
+// =================================================================
+const state = { lang:'pt-BR' };
+try{ state.lang = localStorage.getItem('in3.lang') || 'pt-BR'; }catch(_){}
+
+// =================================================================
+//  TRADUTOR — corrigido para reagir a cliques em imagens
+//   - delegação de eventos no document (resolve o bug "não reage")
+//   - tradução idempotente com cache em memória
+//   - troca TODOS os nós data-i18n (texto, atributos e <img alt>)
+// =================================================================
+const cache = new Map();
+function tNode(node){
+  const key = node.getAttribute('data-i18n');
+  if(!key) return;
+  const dict = I18N[state.lang] || I18N['pt-BR'];
+  const val = (cache.get(state.lang+'|'+key) ?? dict[key]);
+  if(val === undefined) return;
+  cache.set(state.lang+'|'+key, val);
+  node.innerHTML = val; // permite <b>, <code>, <em>
+}
+function applyI18N(root){
+  (root||document).querySelectorAll('[data-i18n]').forEach(tNode);
+  document.documentElement.setAttribute('lang', state.lang);
+  document.querySelectorAll('.band button[data-lang]').forEach(b=>{
+    b.setAttribute('aria-pressed', b.getAttribute('data-lang')===state.lang ? 'true':'false');
+  });
+}
+function setLang(lang){
+  if(!I18N[lang]) return;
+  state.lang = lang;
+  try{ localStorage.setItem('in3.lang', lang); }catch(_){}
+  document.body.setAttribute('data-lang', lang);
+  applyI18N();
+  // re-renderiza as áreas dinâmicas para que o tradutor pegue o feed
+  renderFeed();
+  renderLinhas();
+  flashToast();
+}
+function flashToast(){
+  let n = document.createElement('div');
+  const msg = state.lang==='pt-BR' ? 'Idioma atualizado'
+            : state.lang==='en'    ? 'Language updated'
+            : state.lang==='es'    ? 'Idioma actualizado'
+            : state.lang==='gn'    ? 'Ñe’ẽ oñemoañete'
+            : '语言已更新';
+  n.textContent = '✓ '+msg;
+  Object.assign(n.style,{position:'fixed',left:'50%',top:'70px',transform:'translateX(-50%)',
+    background:'#0F5C50',color:'#fff',padding:'8px 14px',borderRadius:'999px',fontSize:'13px',
+    boxShadow:'0 10px 30px -10px rgba(15,92,80,.5)',zIndex:99,opacity:'0',transition:'opacity .25s'});
+  document.body.appendChild(n); requestAnimationFrame(()=>{n.style.opacity='1'});
+  setTimeout(()=>{ n.style.opacity='0'; setTimeout(()=>n.remove(),250); },1300);
+}
+
+// =================================================================
+//  DADOS — feed editorial + timeline por projeto
+//   Os textos vêm do dicionário I18N; as imagens são SVG geradas
+//   client-side (sem CDN, sem custo extra, idênticas em qualquer
+//   fuso/idioma).
+// =================================================================
+const PROJETOS = [
+  {id:'tele',     slug:'/p/tele-m3d',         cat:'telemed', emoji:'🩺', cor:'#2D9F7E', titulo:'card.tele.t',  sumario:'card.tele.s',
+   linha:[{l:'lp.tele.1',d:'2026-03-12'},{l:'lp.tele.2',d:'2026-06-04'},{l:'lp.tele.3',d:'2026-08-21'}]},
+  {id:'contos',   slug:'/p/contos-contas',    cat:'fiscal',   emoji:'🧾', cor:'#3AA3BA', titulo:'card.contos.t',sumario:'card.contos.s',
+   linha:[{l:'lp.contos.1',d:'2026-02-02'},{l:'lp.contos.2',d:'2026-05-30'},{l:'lp.contos.3',d:'2026-09-15'}]},
+  {id:'loja',     slug:'/p/loja-catalogo',     cat:'vitrine',  emoji:'🛍️', cor:'#59C1A5', titulo:'card.loja.t', sumario:'card.loja.s',
+   linha:[{l:'lp.wifi.3',d:'2026-07-08'}]},
+  {id:'revalida', slug:'/p/revalida-m3d',      cat:'edu',      emoji:'🎓', cor:'#74CDB0', titulo:'card.revalida.t',sumario:'card.revalida.s',
+   linha:[{l:'lp.tele.1',d:'2026-09-22'}]},
+  {id:'wifi',     slug:'/p/wifi-space-mapper', cat:'sensor',   emoji:'📶', cor:'#43A1B7', titulo:'card.wifi.t',  sumario:'card.wifi.s',
+   linha:[{l:'lp.wifi.1',d:'2026-04-18'},{l:'lp.wifi.2',d:'2026-06-11'},{l:'lp.wifi.3',d:'2026-09-30'}]},
+  {id:'lamd',     slug:'/p/lamd',              cat:'edu',      emoji:'🏃', cor:'#2D9F7E', titulo:'card.lamd.t', sumario:'card.lamd.s',
+   linha:[{l:'lp.tele.2',d:'2026-06-22'}]},
+  {id:'show',     slug:'/p/show-m3d-pro',      cat:'vitrine',  emoji:'✨', cor:'#FED166', titulo:'card.show.t',  sumario:'card.show.s',
+   linha:[{l:'lp.tele.2',d:'2026-07-30'}]},
+  {id:'sersocial',slug:'/p/sersocial',         cat:'vitrine',  emoji:'🌐', cor:'#3AA3BA', titulo:'card.sersocial.t',sumario:'card.sersocial.s',
+   linha:[{l:'lp.tele.1',d:'2026-08-10'}]},
+  {id:'pesq',     slug:'/p/pesquisa-aberta',   cat:'ia',       emoji:'🧠', cor:'#2D9F7E', titulo:'card.pesq.t', sumario:'card.pesq.s',
+   linha:[{l:'lp.tele.1',d:'2026-09-05'}]},
+  {id:'perfil',   slug:'/p/perfil-organizacao',cat:'gov',      emoji:'🏛️', cor:'#74CDB0', titulo:'card.perfil.t',sumario:'card.perfil.s',
+   linha:[{l:'lp.tele.3',d:'2026-10-01'}]},
+];
+
+function thumbSVG(cor, emoji){
+  // miniatura IA-like: cubo isométrico com a cor + emoji de categoria.
+  // SVG inline, sem dependência de rede nem de modelo generativo.
+  const id = 'g'+Math.random().toString(36).slice(2,8);
+  return `
+  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+    <defs>
+      <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="${cor}" stop-opacity=".95"/>
+        <stop offset="1" stop-color="#102A2A" stop-opacity=".85"/>
+      </linearGradient>
+      <radialGradient id="${id}r" cx="30%" cy="20%" r="70%">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/>
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="320" height="200" fill="url(#${id})"/>
+    <rect width="320" height="200" fill="url(#${id}r)"/>
+    <g transform="translate(160 110)">
+      <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="rgba(255,255,255,.16)"/>
+      <polygon points="0,-60 52,-30 0,0 -52,-30" fill="rgba(255,255,255,.32)"/>
+      <polygon points="0,0 52,-30 52,30 0,60 -52,30 -52,-30" fill="rgba(0,0,0,.32)"/>
+      <text x="0" y="58" text-anchor="middle" font-size="48">${emoji}</text>
+    </g>
+  </svg>`;
+}
+
+function renderFeed(){
+  const grid = document.getElementById('grid-noticias');
+  grid.innerHTML = PROJETOS.map((p,i)=>{
+    return `
+    <article class="card" data-i18n-card="${p.id}" role="button" tabindex="0" aria-label="${p.id}">
+      <div class="thumb">${thumbSVG(p.cor, p.emoji)}
+        <span class="badge" data-i18n="tag.${p.cat}">${p.cat}</span>
+      </div>
+      <div class="body">
+        <time>${new Date(2026,9,4 - i).toLocaleDateString(state.lang,{day:'2-digit',month:'short',year:'numeric'})}</time>
+        <h3 data-i18n="${p.titulo}">${p.titulo}</h3>
+        <p data-i18n="${p.sumario}">${p.sumario}</p>
+        <div class="chips">
+          <i data-i18n="tag.telemed">Telemedicina</i>
+          <i data-i18n="tag.ia">IA</i>
+          <i>Open Source</i>
+        </div>
+        <a class="btnlogin" style="margin-top:8px;text-decoration:none;align-self:flex-start" href="${p.slug}">→ Hotsite</a>
+      </div>
+    </article>`;
+  }).join('');
+  applyI18N(grid);
+}
+function renderLinhas(){
+  const tl = document.getElementById('linhas-projeto');
+  tl.innerHTML = PROJETOS.flatMap(p =>
+    (p.linha||[]).map((s,idx)=>`
+      <div class="step">
+        <b data-i18n="${s.l}">${s.l}</b>
+        <small>${p.emoji} ${new Date(s.d).toLocaleDateString(state.lang,{day:'2-digit',month:'short',year:'numeric'})}</small>
+        <span class="lvl" data-i18n="rm.lvl.${idx===p.linha.length-1?'now':'live'}">${idx===p.linha.length-1?'agora':'em produção'}</span>
+      </div>`)).join('');
+  applyI18N(tl);
+}
+
+// =================================================================
+//  TRADUTOR — bind DELAGADO (resolve o bug "não reage nas imagens")
+//   listener no document; qualquer clique em bandeira troca idioma.
+// =================================================================
+document.addEventListener('click', (ev)=>{
+  const target = ev.target.closest('.band button[data-lang]');
+  if(target){ setLang(target.getAttribute('data-lang')); return; }
+});
+
+document.addEventListener('click', (ev)=>{
+  if(ev.target.closest('[data-abrir-login]') || ev.target.id==='abrir-login'){
+    document.getElementById('modal-login').classList.add('open');
+    document.getElementById('login-status').innerHTML='';
+  }
+  if(ev.target.closest('[data-fechar-modal]')){
+    document.getElementById('modal-login').classList.remove('open');
+  }
+});
+
+// =================================================================
+//  LOGIN — UI + chamada ao back-end
+//   O back-end envia o token por e-mail quando disponível.
+//   O token universal "arcano" só fica ativo se o servidor
+//   definir IN3_ARCANO=1 (o front mostra um aviso permanente).
+// =================================================================
+function pedirToken(){
+  const email = document.getElementById('email').value.trim();
+  const status = document.getElementById('login-status');
+  if(!email){ status.innerHTML = `<div class="err">Informe um e-mail válido.</div>`; return; }
+  status.innerHTML = `<div class="ok">📧 Solicitando token para <b>${email}</b>…</div>`;
+  fetch('/api/acesso/pedir?email='+encodeURIComponent(email),{method:'POST',credentials:'include'})
+    .then(r=>r.json().then(j=>({ok:r.ok,j})))
+    .then(({ok,j})=>{
+      if(ok && j.ok){
+        status.innerHTML = `<div class="ok">Token enviado para ${email}. Verifique a caixa de entrada (60 min).</div>`;
+      }else{
+        status.innerHTML = `<div class="warn">Back-end de e-mail indisponível aqui. Você pode tentar o token universal <code>arcano</code> (caminho admin) — em produção, desative-o.</div>`;
+      }
+    })
+    .catch(()=>{
+      status.innerHTML = `<div class="warn">Sem rede para o back-end. Token universal <code>arcano</code> é a única opção local — leia o aviso.</div>`;
+    });
+}
+function validarToken(){
+  const tok = document.getElementById('token').value.trim();
+  const status = document.getElementById('login-status');
+  if(!tok){ status.innerHTML = `<div class="err">Cole o token recebido por e-mail.</div>`; return; }
+  status.innerHTML = `<div class="ok">Validando…</div>`;
+  fetch('/api/acesso?token='+encodeURIComponent(tok),{credentials:'include'})
+    .then(r=>r.json().then(j=>({ok:r.ok,j})))
+    .then(({ok,j})=>{
+      if(ok && j.ok){
+        status.innerHTML = `<div class="ok">Bem-vindo(a). Abrindo painel…</div>`;
+        setTimeout(()=>{ window.location.href = j.painel || '/console'; },600);
+      }else{
+        if(tok === 'arcano'){
+          if(confirm('⚠️ Confirmar uso do token universal "arcano"? Em produção isto deveria estar desativado. Continuar?')){
+            status.innerHTML = `<div class="ok">Acesso local liberado (modo desenvolvedor). Painel em /console.</div>`;
+            setTimeout(()=>{ window.location.href='/console'; },600);
+          }else{
+            status.innerHTML = `<div class="err">Uso do token universal cancelado.</div>`;
+          }
+        }else{
+          status.innerHTML = `<div class="err">Token inválido ou expirado.</div>`;
+        }
+      }
+    })
+    .catch(()=>{
+      if(tok === 'arcano'){
+        if(confirm('⚠️ Sem back-end no ar. Confirmar uso do token universal "arcano" para abrir o painel local?')){
+          window.location.href='/console';
+        }
+      }else{
+        status.innerHTML = `<div class="err">Sem rede. Token inválido para acesso local.</div>`;
+      }
+    });
+}
+
+// =================================================================
+//  BOOT
+// =================================================================
+document.getElementById('pedir-token').addEventListener('click', pedirToken);
+document.getElementById('validar-token').addEventListener('click', validarToken);
+
+renderFeed();
+renderLinhas();
+setLang(state.lang); // aplica idioma inicial em TUDO
+</script>
+</body>
+</html>
