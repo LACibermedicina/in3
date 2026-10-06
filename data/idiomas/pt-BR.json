@@ -1,0 +1,30 @@
+{
+ "idioma": "pt-BR",
+ "interface": {
+  "carrossel_titulo": "Projetos em destaque",
+  "carrossel_dica": "Arraste, use as setas do teclado ou os botões. Cada cartão informa o nível de detalhamento liberado.",
+  "carrossel_trilho": "Lista de projetos em destaque",
+  "anterior": "Anterior",
+  "proximo": "Próximo",
+  "pausar": "Pausar rotação automática",
+  "ir_para": "Ir para o cartão",
+  "ver_projeto": "Ver projeto",
+  "niveis_liberados": "Níveis de liberação",
+  "feed_titulo": "O que mudou por aqui",
+  "feed_dica": "Atividade técnica traduzida para linguagem humana. O detalhe técnico aparece só se você pedir — e só no nível liberado.",
+  "ver_tudo": "Ver tudo",
+  "revelar_tecnico": "Revelar detalhes técnicos",
+  "detalhe_tecnico": "Detalhe técnico",
+  "sem_tecnico": "O detalhe técnico deste item está em camada superior.",
+  "pedir_detalhamento": "Pedir detalhamento",
+  "feed_vazio": "Nenhuma publicação liberada ainda.",
+  "voltar_feed": "Voltar ao feed",
+  "idioma_rotulo": "Idioma da página",
+  "painel_titulo": "Painel",
+  "feed": "Feed",
+  "portfolio": "Portfólio",
+  "busca": "Busca",
+  "tecnologias": "Tecnologias",
+  "pedir": "Pedir detalhamento"
+ }
+}

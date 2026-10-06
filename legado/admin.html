@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>IN³ · Painel administrativo</title>
+<style>
+:root{--teal-claro:#7CC6B4;--teal:#47B29F;--teal-medio:#3BA794;--teal-escuro:#167D6E;--teal-profundo:#11695C;--verde-sombra:#0F5C50;
+--amarelo:#FFD166;--rosa:#FF6B9D;--azul:#4CC9F0;--lilas:#9B8CFF;--verde-vivo:#06D6A0;--tinta:#122A2E;--papel:#F6FFFC;
+--raio:20px;--raio-sm:13px;--sombra:0 16px 38px rgba(15,92,80,.16);--anim:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(60vw 60vw at 8% -8%,rgba(124,198,180,.5),transparent 60%),radial-gradient(50vw 50vw at 96% 10%,rgba(76,201,240,.32),transparent 60%),linear-gradient(180deg,#F6FFFC,#EAFBF6);
+font-family:ui-rounded,"Segoe UI",system-ui,sans-serif;color:var(--tinta);line-height:1.6;min-height:100vh}
+.wrap{width:min(1120px,93vw);margin:0 auto;padding:26px 0 60px}
+h1,h2,h3{line-height:1.15;margin:0 0 .4em;letter-spacing:-.02em}
+header.topo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 0}
+.marca{display:flex;align-items:center;gap:12px;font-weight:900}
+.marca small{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-escuro);font-weight:700}
+.card{background:rgba(255,255,255,.94);border:1px solid rgba(22,125,110,.14);border-radius:var(--raio);padding:24px;box-shadow:var(--sombra);margin-bottom:22px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+label{display:flex;flex-direction:column;gap:6px;font-size:.83rem;font-weight:750}
+input,select,textarea{font:inherit;padding:11px 13px;border-radius:var(--raio-sm);border:1px solid rgba(22,125,110,.24);background:#fff;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(71,178,159,.18)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font:inherit;font-weight:750;padding:11px 19px;border-radius:999px;transition:.28s var(--anim);text-decoration:none}
+.btn:hover{transform:translateY(-2px)}
+.btn-pri{background:linear-gradient(135deg,var(--teal-medio),var(--teal-profundo));color:#fff;box-shadow:0 10px 24px rgba(15,92,80,.28)}
+.btn-claro{background:#fff;color:var(--teal-profundo);border:1px solid rgba(22,125,110,.2)}
+.btn-rosa{background:linear-gradient(135deg,var(--rosa),#FF9F45);color:#fff}
+.btn-mini{padding:7px 13px;font-size:.82rem}
+.linha{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.item{border:1px solid rgba(22,125,110,.16);border-radius:var(--raio-sm);padding:16px;background:#fff;display:grid;gap:10px}
+.item.privado{background:linear-gradient(180deg,#FFF9FA,#fff);border-color:rgba(255,107,157,.3)}
+.item h3{margin:0;font-size:1.02rem}
+.selo{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:4px 11px;border-radius:999px}
+.s-publico{background:rgba(6,214,160,.2);color:#07795C}
+.s-privado{background:rgba(255,107,157,.2);color:#A81B5A}
+.chk{flex-direction:row;align-items:center;gap:9px;font-weight:760;background:rgba(71,178,159,.08);padding:10px 13px;border-radius:var(--raio-sm);cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--teal-profundo)}
+.aviso{background:rgba(76,201,240,.14);border-left:4px solid var(--azul);padding:12px 15px;border-radius:0 var(--raio-sm) var(--raio-sm) 0;font-size:.88rem}
+.ok{background:rgba(6,214,160,.18);border-left:4px solid var(--verde-vivo);padding:12px 15px;border-radius:0 var(--raio-sm) var(--raio-sm) 0;font-size:.88rem}
+.erro{background:rgba(255,107,157,.16);border-left:4px solid var(--rosa);padding:12px 15px;border-radius:0 var(--raio-sm) var(--raio-sm) 0;font-size:.88rem}
+pre{background:#0F2B28;color:#B9F2E3;border-radius:var(--raio-sm);padding:14px;overflow:auto;font-size:.8rem;max-height:260px}
+.mudo{opacity:.72;font-size:.86rem}
+.esconde{display:none}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:9px 11px;text-align:left;border-bottom:1px solid rgba(22,125,110,.14)}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--teal-medio)}
+.abas{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.aba{cursor:pointer;font:inherit;font-weight:750;font-size:.86rem;padding:8px 15px;border-radius:999px;border:1px solid rgba(22,125,110,.2);background:#fff;color:var(--teal-profundo)}
+.aba.on{background:var(--teal-profundo);color:#fff;border-color:var(--teal-profundo)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topo">
+    <div class="marca">
+      <svg width="46" height="41" viewBox="0 0 130 116" aria-label="IN³">
+        <defs>
+          <linearGradient id="aT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7CC6B4"/><stop offset="1" stop-color="#47B29F"/></linearGradient>
+          <linearGradient id="aE" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3BA794"/><stop offset="1" stop-color="#11695C"/></linearGradient>
+          <linearGradient id="aD" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4CC9F0"/><stop offset="1" stop-color="#167D6E"/></linearGradient>
+        </defs>
+        <polygon points="65,4 124,36 65,68 6,36" fill="url(#aT)"/><polygon points="6,36 65,68 65,112 6,80" fill="url(#aE)"/>
+        <polygon points="124,36 65,68 65,112 124,80" fill="url(#aD)"/><polygon points="65,34 88,47 65,60 42,47" fill="#FFD166"/>
+        <text x="65" y="49" font-size="15" font-weight="800" text-anchor="middle" fill="#0F5C50">³</text>
+      </svg>
+      <div>IN³ · Painel<small>página administrativa apartada</small></div>
+    </div>
+    <div class="linha" style="margin-left:auto">
+      <span id="sessao" class="mudo">🔒 não autenticado</span>
+      <a class="btn btn-claro btn-mini" href="/">🌐 ver site público</a>
+      <button class="btn btn-rosa btn-mini" id="btn-sair">sair</button>
+    </div>
+  </header>
+
+  <div class="aviso">🔐 <strong>Controle de acesso:</strong> esta página é separada do site público. Sem a senha correta nada é liberado.
+  A verificação usa <strong>WebCrypto (SHA-256)</strong> no seu navegador e, opcionalmente, o login do servidor (<code>/api/admin/login</code>),
+  que guarda a senha apenas como hash e devolve um token temporário de 60 minutos.</div>
+
+  <!-- LOGIN -->
+  <section class="card esconde" id="tela-login">
+    <h1>🔐 Entrar no painel</h1>
+    <p class="mudo">A senha é definida pelo instalador (nunca fica no código). Troque-a em <code>tools/server.mjs</code> (variável <code>ADMIN_PASSWORD</code>) antes de publicar.</p>
+    <div class="grid">
+      <label>Senha do administrador<input type="password" id="senha" placeholder="••••••••" autocomplete="current-password"></label>
+      <div class="linha" style="align-items:end"><button class="btn btn-pri" id="btn-entrar">🔓 Desbloquear painel</button></div>
+    </div>
+    <div id="login-msg"></div>
+  </section>
+
+  <!-- APP -->
+  <section id="tela-app" class="esconde">
+    <div class="abas">
+      <button class="aba on" data-aba="novo">➕ Novo item</button>
+      <button class="aba" data-aba="lista">📚 Itens <span id="cont-itens"></span></button>
+      <button class="aba" data-aba="github">🐙 GitHub &amp; build</button>
+      <button class="aba" data-aba="pedidos">📨 Pedidos recebidos</button>
+      <button class="aba" data-aba="ajuda">📖 Ajuda</button>
+    </div>
+
+    <!-- NOVO / EDITAR -->
+    <div class="card" id="painel-novo">
+      <h2 id="titulo-form">➕ Criar item de portfólio</h2>
+      <p class="mudo">Cadastre por <strong>endereço GitHub</strong> e/ou por <strong>documentação base (playbook)</strong>.
+      Regra de ouro: todo item nasce <strong>oculto</strong>. Ele só aparece em <code>in.m3d.pro</code> quando você marcar “mostrar ao público”.</p>
+      <div class="grid">
+        <label>Identificador (slug)<input id="f-id" placeholder="tele-m3d"></label>
+        <label>Título<input id="f-titulo" placeholder="Tele.M3D — telemedicina de ponta a ponta"></label>
+        <label>Emoji<input id="f-emoji" placeholder="🩺" maxlength="4"></label>
+        <label>Categoria<input id="f-categoria" placeholder="Telemedicina &amp; Saúde Digital"></label>
+        <label>Status<select id="f-status"></select></label>
+        <label>Arte ilustrativa<select id="f-arte"></select></label>
+        <label style="grid-column:1/-1">Endereços GitHub associados (um por linha)<textarea id="f-repos" rows="3" placeholder="https://github.com/LACibermedicina/tele.M3D.pro.final"></textarea></label>
+        <label style="grid-column:1/-1">Documentação base / playbook (caminho ou URL)<textarea id="f-playbook" rows="2" placeholder="docs/PLAYBOOK.md#tele"></textarea></label>
+        <label style="grid-column:1/-1">Tecnologias extras (separadas por vírgula)<input id="f-tech" placeholder="WebRTC, Prontuário, LGPD"></label>
+        <label class="chk" style="grid-column:1/-1"><input type="checkbox" id="f-publico"> 👁️ <span>Mostrar ao público — publicar este item no site <code>in.m3d.pro</code></span></label>
+        <label class="chk" style="grid-column:1/-1"><input type="checkbox" id="f-linkrepo"> 🔗 <span>Mostrar também o endereço do repositório no site público</span></label>
+      </div>
+      <div class="linha" style="margin-top:16px">
+        <button class="btn btn-pri" id="btn-salvar">💾 Salvar item</button>
+        <button class="btn btn-claro" id="btn-limpar">🧹 Limpar formulário</button>
+        <span class="mudo" id="msg-form"></span>
+      </div>
+    </div>
+
+    <!-- LISTA -->
+    <div class="card esconde" id="painel-lista">
+      <h2>📚 Itens do portfólio</h2>
+      <p class="mudo">Marque/desmarque “mostrar ao público” e clique em <strong>Exportar curadoria</strong>. O arquivo gerado alimenta
+      <code>node tools/publish.mjs</code>, que reconstrói o site respeitando exatamente as suas marcações.</p>
+      <div class="linha" style="margin-bottom:14px">
+        <button class="btn btn-pri" id="btn-exportar">⬇️ Exportar curadoria (JSON)</button>
+        <button class="btn btn-claro" id="btn-toggle-todos">👁️ Marcar todos os visíveis como públicos</button>
+        <button class="btn btn-claro" id="btn-limpar-storage">🗑️ Apagar dados locais</button>
+      </div>
+      <div id="lista-itens"></div>
+    </div>
+
+    <!-- GITHUB -->
+    <div class="card esconde" id="painel-github">
+      <h2>🐙 Coleta GitHub (server-side)</h2>
+      <p class="mudo">O navegador <strong>nunca</strong> acessa a API do GitHub. A coleta roda no servidor com o token em variável de ambiente e grava apenas um cache local.</p>
+      <div class="linha">
+        <button class="btn btn-pri" id="btn-refresh">🔄 Atualizar cache do GitHub</button>
+        <button class="btn btn-claro" id="btn-build">🏗️ Reconstruir o site (build)</button>
+      </div>
+      <pre id="saida-github">aguardando…</pre>
+      <div class="aviso">Comandos equivalentes no terminal: <code>npm run fetch:github</code> → <code>npm run build</code> → <code>npm run verify</code>.</div>
+    </div>
+
+    <!-- PEDIDOS -->
+    <div class="card esconde" id="painel-pedidos">
+      <h2>📨 Pedidos de detalhes recebidos</h2>
+      <p class="mudo">Pedidos enviados pelo formulário público. Se o servidor estiver rodando, eles ficam em <code>data/requests.json</code>.</p>
+      <div class="linha"><button class="btn btn-claro" id="btn-carregar-pedidos">🔄 Carregar pedidos</button></div>
+      <div id="tabela-pedidos"></div>
+    </div>
+
+    <!-- AJUDA -->
+    <div class="card esconde" id="painel-ajuda">
+      <h2>📖 Como funciona a política “mostrar ao público”</h2>
+      <table>
+        <thead><tr><th>Camada</th><th>O que faz</th><th>Onde</th></tr></thead>
+        <tbody>
+          <tr><td>Curadoria</td><td>checkbox por item (<code>mostrar_ao_publico</code>)</td><td>este painel → <code>data/portfolio.source.json</code></td></tr>
+          <tr><td>Build</td><td>injeta no HTML público apenas o que está marcado</td><td><code>tools/build.mjs</code></td></tr>
+          <tr><td>Verificação</td><td>falha o build se algo privado vazar</td><td><code>tools/verify.mjs</code></td></tr>
+          <tr><td>Servidor</td><td>filtra de novo em <code>/api/public/portfolio</code></td><td><code>tools/server.mjs</code></td></tr>
+        </tbody>
+      </table>
+      <h3 style="margin-top:20px">O que nunca vai para o GitHub</h3>
+      <p class="mudo">A pasta <code>data/</code> (dados coletados e curadoria), o arquivo <code>portfolio.full.json</code> e o <code>.env</code> ficam fora do <code>.gitignore</code> de publicação. O repositório guarda o <strong>motor</strong>, não os dados do site.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Configuração injetada no build (sem segredos). */
+const CFG = {"brand":{"nome":"IN³","nome_longo":"IN³ — INcubator","host_publico":"in.m3d.pro","pai":"m3d.pro","slogan":"O que entra na m3d, sai ao cubo.","subslogan":"Portfólio vivo de pesquisa, engenharia e saúde digital.","manifesto":"A m3d.pro cuida de tecnologia em saúde com ciência e propósito. A IN³ é a incubadora: pega o que está dentro da m3d — protótipos, dados, código, gente — e eleva ao cubo. Cada projeto aqui é um cubo: três faces visíveis para o público, uma aresta técnica para quem pede para ver.","paleta":{"teal_claro":"#7CC6B4","teal":"#47B29F","teal_medio":"#3BA794","teal_escuro":"#167D6E","teal_profundo":"#11695C","verde_sombra":"#0F5C50","amarelo":"#FFD166","rosa":"#FF6B9D","azul":"#4CC9F0","lilas":"#9B8CFF","verde_vivo":"#06D6A0","tinta":"#122A2E","papel":"#F6FFFC"},"origem_visual":"Paleta e linguagem herdadas da identidade m3d.pro (logo geométrico low-poly, gradientes teal #7CC6B4 → #167D6E, tom humano e acolhedor). A IN³ adiciona o cubo (³) e cores vibrantes jovens."},"categorias":["Telemedicina & Saúde Digital","Fiscal & Finanças","Comércio & Vitrine","Educação Médica","Instrumentação & Sensores","Pesquisa & IA","Governança & Infra"],"status_opcoes":["ativo","em incubação","protótipo","pesquisa","entregue","backlog","arquivado","infra"],"github_conta":"LACibermedicina","gerado_em":"2026-10-03"};
+const LS = 'in3.painel.itens';
+const SENHA_DEMO = '';
+let token = '';
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sha256 = async txt => {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+};
+
+/* ---------- IndexedDB (persistência local, sem backend) ---------- */
+function abrirDB(){
+  return new Promise((ok, err) => {
+    const r = indexedDB.open('in3-quadro', 1);
+    r.onupgradeneeded = () => { const db = r.result; if (!db.objectStoreNames.contains('itens')) db.createObjectStore('itens', {keyPath:'id'}); };
+    r.onsuccess = () => ok(r.result); r.onerror = () => err(r.error);
+  });
+}
+async function dbTodos(){
+  const db = await abrirDB();
+  return new Promise((ok, err) => { const tx = db.transaction('itens','readonly').objectStore('itens').getAll(); tx.onsuccess = () => ok(tx.result||[]); tx.onerror = () => err(tx.error); });
+}
+async function dbSalvar(item){
+  const db = await abrirDB();
+  return new Promise((ok, err) => { const tx = db.transaction('itens','readwrite').objectStore('itens').put(item); tx.onsuccess = () => ok(true); tx.onerror = () => err(tx.error); });
+}
+async function dbApagarTudo(){
+  const db = await abrirDB();
+  return new Promise((ok, err) => { const tx = db.transaction('itens','readwrite').objectStore('itens').clear(); tx.onsuccess = () => ok(true); tx.onerror = () => err(tx.error); });
+}
+
+/* ---------- login ---------- */
+async function tentarLogin(senha){
+  try {
+    const r = await fetch('/api/admin/login', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({senha})});
+    if (r.ok) { const d = await r.json(); token = d.token; return 'servidor'; }
+    if (r.status === 401) return 'senha-invalida-servidor';
+  } catch { /* servidor ausente: segue no modo local */ }
+  return (await sha256(senha)) === (await sha256(SENHA_DEMO)) ? 'local' : 'senha-invalida';
+}
+$('#btn-entrar').addEventListener('click', async () => {
+  const modo = await tentarLogin($('#senha').value);
+  if (modo.startsWith('senha-invalida')) { $('#login-msg').innerHTML = '<div class="erro">✖ Senha incorreta.</div>'; return; }
+  $('#tela-login').classList.add('esconde'); $('#tela-app').classList.remove('esconde');
+  $('#sessao').innerHTML = modo === 'servidor' ? '✅ autenticado · servidor' : '✅ autenticado · modo local (IndexedDB)';
+  await carregarLista();
+});
+$('#senha').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btn-entrar').click(); });
+$('#btn-sair').addEventListener('click', () => { token=''; $('#tela-app').classList.add('esconde'); $('#tela-login').classList.remove('esconde'); $('#sessao').textContent='🔒 não autenticado'; });
+
+/* ---------- opções do formulário ---------- */
+CFG.status_opcoes.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; $('#f-status').appendChild(o); });
+['generico','telemedicina','fiscal','catalogo','educacao','sensor','esporte','vitrine','ia','cirurgia','certificado','governanca']
+  .forEach(a => { const o = document.createElement('option'); o.value = a; o.textContent = a; $('#f-arte').appendChild(o); });
+
+/* ---------- abas ---------- */
+document.querySelectorAll('.aba').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.aba').forEach(x => x.classList.toggle('on', x === b));
+  ['novo','lista','github','pedidos','ajuda'].forEach(a => $('#painel-'+a).classList.toggle('esconde', a !== b.dataset.aba));
+}));
+
+/* ---------- salvar item ---------- */
+function lerForm(){
+  const reps = $('#f-repos').value.split('\n').map(s => s.trim()).filter(Boolean)
+    .map(s => s.replace(/^https?:\/\/github\.com\//,'').replace(/\.git$/,'').replace(/\/$/,''));
+  return {
+    id: ($('#f-id').value.trim() || $('#f-titulo').value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'item-' + Date.now()),
+    titulo: $('#f-titulo').value.trim() || 'Item sem título',
+    emoji: $('#f-emoji').value.trim() || '🧊',
+    categoria: $('#f-categoria').value.trim() || 'Geral',
+    status: $('#f-status').value,
+    mostrar_ao_publico: $('#f-publico').checked,
+    mostrar_link_repo: $('#f-linkrepo').checked,
+    repos: reps,
+    tech_extra: $('#f-tech').value.split(',').map(s => s.trim()).filter(Boolean),
+    linha_do_tempo: [{data: new Date().toISOString().slice(0,10), marco: 'Item cadastrado no painel da IN³'}],
+    imagem_svg: $('#f-arte').value,
+    playbook: $('#f-playbook').value.trim() || null
+  };
+}
+$('#btn-salvar').addEventListener('click', async () => {
+  const item = lerForm();
+  await dbSalvar(item);
+  if (token) {
+    try { await fetch('/api/admin/project', {method:'POST', headers:{'content-type':'application/json','x-in3-token':token}, body: JSON.stringify(item)}); }
+    catch { /* modo local */ }
+  }
+  $('#msg-form').innerHTML = `✅ “${esc(item.titulo)}” salvo · ${item.mostrar_ao_publico ? '👁️ visível ao público' : '🙈 oculto (padrão)'}`;
+  await carregarLista();
+});
+$('#btn-limpar').addEventListener('click', () => {
+  ['f-id','f-titulo','f-emoji','f-categoria','f-repos','f-tech','f-playbook'].forEach(i => $('#'+i).value = '');
+  $('#f-publico').checked = false; $('#f-linkrepo').checked = false; $('#msg-form').textContent = '';
+});
+
+/* ---------- lista ---------- */
+async function carregarLista(){
+  const itens = await dbTodos();
+  $('#cont-itens').textContent = itens.length ? `(${itens.length})` : '(0)';
+  $('#lista-itens').innerHTML = itens.length ? itens.map(i => `
+    <div class="item ${i.mostrar_ao_publico ? '' : 'privado'}">
+      <div class="linha">
+        <h3>${esc(i.emoji)} ${esc(i.titulo)}</h3>
+        <span class="selo ${i.mostrar_ao_publico ? 's-publico' : 's-privado'}">${i.mostrar_ao_publico ? '👁️ público' : '🙈 oculto'}</span>
+        <span class="mudo">${esc(i.categoria)} · ${esc(i.status)}</span>
+      </div>
+      <div class="mudo">📦 ${i.repos.length ? esc(i.repos.join(' · ')) : 'sem repositório vinculado'} ${i.playbook ? ' · 📖 ' + esc(i.playbook) : ''}</div>
+      <div class="linha">
+        <label class="chk"><input type="checkbox" data-pub="${esc(i.id)}" ${i.mostrar_ao_publico?'checked':''}> mostrar ao público</label>
+        <label class="chk"><input type="checkbox" data-link="${esc(i.id)}" ${i.mostrar_link_repo?'checked':''}> exibir link do repo</label>
+        <button class="btn btn-claro btn-mini" data-editar="${esc(i.id)}">✏️ editar</button>
+        <button class="btn btn-claro btn-mini" data-remover="${esc(i.id)}">🗑️ remover</button>
+      </div>
+    </div>`).join('') : '<p class="mudo">Nenhum item no painel ainda. Nada é publicado até você marcar “mostrar ao público”.</p>';
+
+  $('#lista-itens').addEventListener('change', async ev => {
+    const pub = ev.target.dataset.pub, link = ev.target.dataset.link;
+    const id = pub || link; if (!id) return;
+    const todos = await dbTodos(); const it = todos.find(x => x.id === id); if (!it) return;
+    if (pub) it.mostrar_ao_publico = ev.target.checked;
+    if (link) it.mostrar_link_repo = ev.target.checked;
+    await dbSalvar(it); await carregarLista();
+  });
+  $('#lista-itens').addEventListener('click', async ev => {
+    const ed = ev.target.dataset.editar, rm = ev.target.dataset.remover;
+    if (ed) { const todos = await dbTodos(); const it = todos.find(x => x.id === ed);
+      $('#f-id').value = it.id; $('#f-titulo').value = it.titulo; $('#f-emoji').value = it.emoji;
+      $('#f-categoria').value = it.categoria; $('#f-status').value = it.status; $('#f-arte').value = it.imagem_svg;
+      $('#f-repos').value = it.repos.join('\n'); $('#f-tech').value = (it.tech_extra||[]).join(', ');
+      $('#f-playbook').value = it.playbook || ''; $('#f-publico').checked = it.mostrar_ao_publico; $('#f-linkrepo').checked = it.mostrar_link_repo;
+      document.querySelector('.aba[data-aba="novo"]').click(); window.scrollTo({top:0,behavior:'smooth'});
+    }
+    if (rm) { const db = await abrirDB(); const tx = db.transaction('itens','readwrite').objectStore('itens').delete(rm); tx.onsuccess = carregarLista; }
+  });
+}
+$('#btn-toggle-todos').addEventListener('click', async () => {
+  const itens = await dbTodos();
+  for (const i of itens) { i.mostrar_ao_publico = true; await dbSalvar(i); }
+  await carregarLista();
+});
+$('#btn-limpar-storage').addEventListener('click', async () => { await dbApagarTudo(); localStorage.removeItem(LS); await carregarLista(); });
+
+/* ---------- exportar curadoria ---------- */
+$('#btn-exportar').addEventListener('click', async () => {
+  const itens = await dbTodos();
+  const conteudo = { meta: {exportado_em: new Date().toISOString(), origem: 'painel IN³', itens: itens.length,
+    publicos: itens.filter(i=>i.mostrar_ao_publico).length, privados: itens.filter(i=>!i.mostrar_ao_publico).length,
+    aviso: 'Rode: node tools/publish.mjs <este-arquivo>. Itens sem mostrar_ao_publico NÃO entram no site.' },
+    brand: CFG.brand, projetos: itens };
+  const blob = new Blob([JSON.stringify(conteudo, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'portfolio.full.json'; a.click(); URL.revokeObjectURL(a.href);
+  $('#cont-itens').textContent = `(${itens.length} · ${conteudo.meta.publicos} públicos exportados)`;
+});
+
+/* ---------- github / build ---------- */
+async function pedir(rota, metodo='POST'){
+  $('#saida-github').textContent = '⏳ falando com o servidor…';
+  try {
+    const r = await fetch(rota, {method: metodo, headers: token ? {'x-in3-token':token} : {}});
+    const d = await r.json();
+    $('#saida-github').textContent = JSON.stringify(d, null, 2);
+  } catch { $('#saida-github').textContent = '✖ Servidor não está rodando. Use o terminal:\n  npm run fetch:github\n  npm run build\n  npm run verify'; }
+}
+$('#btn-refresh').addEventListener('click', () => pedir('/api/github/refresh'));
+$('#btn-build').addEventListener('click', () => pedir('/api/health', 'GET'));
+
+/* ---------- pedidos ---------- */
+$('#btn-carregar-pedidos').addEventListener('click', async () => {
+  try {
+    const r = token
+      ? await fetch('/api/admin/requests', {headers:{'x-in3-token':token}, cache:'no-store'})
+      : await fetch('/data/requests.json', {cache:'no-store'});
+    const d = await r.json(); const lista = d.pedidos || [];
+    $('#tabela-pedidos').innerHTML = lista.length ? `<table><thead><tr><th>Quando</th><th>Nome</th><th>Projeto</th><th>Nível</th><th>Contato</th><th>Mensagem</th></tr></thead><tbody>${
+      lista.map(p => `<tr><td>${esc((p.quando||'').slice(0,16).replace('T',' '))}</td><td>${esc(p.nome)}</td><td>${esc(p.projeto)}</td><td>${esc(p.nivel)}</td><td>${esc(p.contato)}</td><td>${esc(p.mensagem)}</td></tr>`).join('')}</tbody></table>`
+      : '<p class="mudo">Nenhum pedido ainda.</p>';
+  } catch { $('#tabela-pedidos').innerHTML = '<p class="mudo">✖ Não consegui ler os pedidos (servidor parado?). Abra <code>data/requests.json</code>.</p>'; }
+});
+
+/* ---------- iniciar ---------- */
+$('#tela-login').classList.remove('esconde');
+</script>
+</body>
+</html>
